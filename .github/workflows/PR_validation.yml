@@ -23,15 +23,3 @@ jobs:
           echo "Reviewers: ${{ steps.pr_info.outputs.reviewers }}"
           echo "Developer: ${{ steps.pr_info.outputs.author }}"
           echo "PR_Number: ${{ steps.pr_info.outputs.pull_request_number }}"  
-  writeData:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout main branch
-        uses: actions/checkout@v2
-      - uses: gr2m/write-csv-file-action@v1.x
-        with:
-          path: data/stats.csv
-          columns: Reviewer, Developer, PR_Number
-          "Reviewer": ${{ steps.pr_info.outputs.reviewers }}
-          "Developer": ${{ steps.pr_info.outputs.author }}
-          "PR_Number": ${{ steps.pr_info.outputs.pull_request_number }}
