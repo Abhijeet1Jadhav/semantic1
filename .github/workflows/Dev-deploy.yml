@@ -4,7 +4,7 @@ concurrency: Development
 
 on:
   workflow_run:
-    workflows: ["PR Workflow"]
+    workflows: [PR Workflow]
     branches: [master]
     types: 
       - completed
