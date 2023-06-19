@@ -11,7 +11,7 @@
     ]
   },
   "npm": "true",
-  "repository": "https://github.com/Abhijeet1Jadhav/semanticdemo",
+  "repository": "https://github.com/Abhijeet1Jadhav/semantic1",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
