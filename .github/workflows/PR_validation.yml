@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v2
       - uses: gr2m/write-csv-file-action@v1.x
         with:
-          path: /stats.csv
+          path: data/stats.csv
           columns: Reviewer, Developer, PR_Number
           "Reviewer": ${{ steps.pr_info.outputs.reviewers }}
           "Developer": ${{ steps.pr_info.outputs.author }}
