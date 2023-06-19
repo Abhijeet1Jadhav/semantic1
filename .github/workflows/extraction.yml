@@ -1,0 +1,30 @@
+name: Update data/octokit-stats.csv
+on:
+  pull_request:
+    types: [opened]
+jobs:
+  update_csv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # fetch statistics for @octokit org
+      - uses: gr2m/org-stats-action@v1.x
+        id: stats
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+      # getting info
+      - name: Get PR Information
+        id: pr_info
+        run: |
+          echo "::set-output name=reviewers::$(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)"
+          echo "::set-output name=author::$(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)"
+          echo "::set-output name=pull_request_number::$(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)"
+
+      # append stats to data/octokit.csv
+      - uses: gr2m/write-csv-file-action@v1.x
+        with:
+          path: data/octokit.csv
+          columns: reviewers,author,pull_request_number
+          "reviewers": ${{ steps.pr_info.outputs.reviewers }}
+          "author": ${{ steps.pr_info.outputs.author }}
+          "pull_request_number": ${{ steps.pr_info.outputs.pull_request_number }}
