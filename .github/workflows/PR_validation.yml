@@ -23,3 +23,4 @@ jobs:
      run: |
          echo "Reviwers: ${{ steps.pr_info.outputs.reviwers }}
          echo "Developer: ${{ steps.pr_info.outputs.author }}
+         echo "Developer: ${{ steps.pr_info.outputs.pr_number }}
