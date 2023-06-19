@@ -1,0 +1,25 @@
+name: PR request
+
+on:
+  push:
+    branches:
+      - master
+    
+jobs:
+  build:
+  runs-on: ubuntu-latest
+  
+  steps:
+  -name: Checkout code
+   uses: actions/checkout@v2
+  -name: Get PR information
+   id: pr_info
+   run: |
+        echo "::set-output name=reviewers::${jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH}"
+        echo "::set-output name=author::${jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH}"
+        echo "::set-output name=pr number::${jq -r '.pull_request.pull_request.number' $GITHUB_EVENT_PATH}"
+        
+  -name: Display pr information
+   run: |
+        echo "Reviwers: ${{ steps.pr_info.outputs.reviwers }}
+        echo "Developer: ${{ steps.pr_info.outputs.author }}
