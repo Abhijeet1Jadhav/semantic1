@@ -1,0 +1,18 @@
+name: Deployment
+
+concurrency: Development
+
+on:
+  workflow_run:
+    workflows: ["PR Workflow"]
+    branches: [master]
+    types: 
+      - completed
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: Development
+    steps:
+      - name: deploy
+        run: echo "hello dev"
