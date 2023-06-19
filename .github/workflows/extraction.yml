@@ -10,6 +10,8 @@ jobs:
       # fetch statistics for @octokit org
       - uses: gr2m/org-stats-action@v1.x
         id: stats
+        with:
+          org: demo-sw
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
       # getting info
