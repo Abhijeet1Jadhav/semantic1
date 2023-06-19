@@ -11,7 +11,7 @@ jobs:
       - uses: gr2m/org-stats-action@v1.x
         id: stats
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
       # getting info
       - name: Get PR Information
         id: pr_info
