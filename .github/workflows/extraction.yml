@@ -27,6 +27,6 @@ jobs:
         with:
           path: data/octokit.csv
           columns: reviewers,author,pull_request_number
-          "reviewers": ${{ steps.pr_info.outputs.reviewers }}
-          "author": ${{ steps.pr_info.outputs.author }}
-          "pull_request_number": ${{ steps.pr_info.outputs.pull_request_number }}
+          "reviewers": $(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)
+          "author": $(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)
+          "pull_request_number": $(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)
