@@ -1,26 +1,25 @@
-name: PR request
+name: PR Workflow
 
 on:
-  push:
-    branches:
-      - master
-    
+  pull_request:
+    types: [opened]
+
 jobs:
   build:
-   runs-on: ubuntu-latest
-  
-   steps:
-   - name: Checkout code
-     uses: actions/checkout@v2
-   - name: Get PR information
-     id: pr_info
-     run: |
-         # echo "::set-output name=reviewers::$(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)"
-         echo "::set-output name=author::$(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)"
-         echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
-        
-   - name: Display pr information
-     run: |
-         # echo "Reviwers: ${{ steps.pr_info.outputs.reviwers }}
-         echo "Developer: ${{ steps.pr_info.outputs.author }}
-         echo "Developer: ${{ steps.pr_info.outputs.pull_request_number }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Get PR Information
+      id: pr_info
+      run: |
+          echo "::set-output name=reviewers::$(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)"
+          echo "::set-output name=author::$(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)"
+          echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+          
+    - name: Display PR Information
+      run: |
+          echo "Reviewers: ${{ steps.pr_info.outputs.reviewers }}"
+          echo "Developer: ${{ steps.pr_info.outputs.author }}"
+          echo "PR_Number: ${{ steps.pr_info.outputs.pull_request_number }}"
