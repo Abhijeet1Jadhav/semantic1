@@ -17,10 +17,10 @@ jobs:
      run: |
          # echo "::set-output name=reviewers::$(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)"
          echo "::set-output name=author::$(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)"
-         echo "::set-output name=pr_number::$(jq -r '.pull_request.pull_request.number' $GITHUB_EVENT_PATH)"
+         echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
         
    - name: Display pr information
      run: |
          echo "Reviwers: ${{ steps.pr_info.outputs.reviwers }}
          echo "Developer: ${{ steps.pr_info.outputs.author }}
-         echo "Developer: ${{ steps.pr_info.outputs.pr_number }}
+         echo "Developer: ${{ steps.pr_info.outputs.pull_request_number }}
