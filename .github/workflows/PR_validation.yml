@@ -32,6 +32,6 @@ jobs:
         with:
           path: /stats.csv
           columns: Reviewer, Developer, PR_Number
-          "Column 1": ${{ steps.pr_info.outputs.reviewers }}
-          "Column 2": ${{ steps.pr_info.outputs.author }}
-          "Column 3": ${{ steps.pr_info.outputs.pull_request_number }}
+          "Reviewer": ${{ steps.pr_info.outputs.reviewers }}
+          "Developer": ${{ steps.pr_info.outputs.author }}
+          "PR_Number": ${{ steps.pr_info.outputs.pull_request_number }}
