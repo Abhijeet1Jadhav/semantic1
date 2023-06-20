@@ -36,7 +36,7 @@ jobs:
           git config --global user.name "Abhijeet1Jadhav"
           git config --global user.email "jadhavabhijeet@gmail.com"
           git fetch origin master
-          git merge  master
+          #git merge  master
           git fetch origin master:tmp
           git rebase tmp
           git add .
