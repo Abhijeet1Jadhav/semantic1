@@ -41,5 +41,8 @@
   "devDependencies": {
     "semantic-release": "^21.0.5",
     "@octokit/rest": "^18.0.7"
+  },
+  "scripts": {
+    "generate-csv": "generate-csv.js"
   }
 }
