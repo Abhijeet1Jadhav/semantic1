@@ -1,48 +1,24 @@
-name: extraction
+name: Print PR Details to CSV
 on:
   pull_request:
-    types: [opened]
+    types:
+      - opened
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Get PR Information
-      id: pr_info
-      run: |
-          echo "::set-output name=reviewers::$(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)"
-          echo "::set-output name=author::$(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)"
-          echo "::set-output name=pull_request_number::$(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)"
-          
-    - name: Display PR Information
-      uses: actions/checkout@v2
-      # fetch statistics for @octokit org
-    - uses: actions/checkout@v2
-      id: stats
-      with:
-        org: demo-sw
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
-    - uses: gr2m/write-csv-file-action@v1.x
-      with:
-        path: data/octokit.csv
-        columns: reviewers,author,pull_request_number
-        "reviewers": $(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)
-        "author": $(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)
-        "pull_request_number": $(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)
-    - uses: actions/checkout@v3
-    - run: git config --local user.email "action@github.com"
-    - run: git config --local user.name "GitHub Action"
-    - run: git config pull.rebase true
-    #- run: git pull https://github.com/Abhijeet1Jadhav/semantic1.git
-    - run: git add data
-    #- run: git add &lt;pathspec&gt; git commit -m "checked"
-    #- run: git push
-    - run: git commit -m "checked"
-    - run: git remote set-url origin https://github.com/Abhijeet1Jadhav/semantic1.git
-    - run: git push https://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@github.com/Abhijeet1Jadhav/semantic1.git HEAD:master
-      env:
-       GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Generate CSV
+        run: python generate_csv.py
