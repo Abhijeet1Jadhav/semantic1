@@ -20,8 +20,8 @@ jobs:
       - name: Install dependencies
         run: 
           pip install pandas
-          apt install python3-pip
-          apt-get update && apt-get upgrade python-pip
+          sudo apt install python3-apt apt
+          sudo apt-get update && apt-get upgrade python-pip
           pip3 install cffi
           pip3 install pygithub
 
