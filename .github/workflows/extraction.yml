@@ -21,4 +21,4 @@ jobs:
         run: pip install pandas
 
       - name: Generate CSV
-        run: python generate_csv.py
+        run: python generate.py
