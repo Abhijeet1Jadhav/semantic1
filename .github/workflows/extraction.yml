@@ -1,31 +1,25 @@
-name: Update data/octokit-stats.csv
+name: PR Workflow
+
 on:
   pull_request:
     types: [opened]
+
 jobs:
-  update_csv:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      # fetch statistics for @octokit org
-      - uses: gr2m/org-stats-action@v1.x
-        id: stats
-        with:
-          org: demo-sw
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
-      # getting info
-      - name: Get PR Information
-        id: pr_info
-        run: |
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Get PR Information
+      id: pr_info
+      run: |
           echo "::set-output name=reviewers::$(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)"
           echo "::set-output name=author::$(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)"
           echo "::set-output name=pull_request_number::$(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)"
-      # append stats to data/octokit.csv
-      - uses: gr2m/write-csv-file-action@v1.x
-        with:
-          path: data/octokit.csv
-          columns: reviewers,author,pull_request_number
-          "reviewers": $(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)
-          "author": $(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)
-          "pull_request_number": $(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)
+          
+    - name: Display PR Information
+      run: |
+          echo "Reviewers: ${{ steps.pr_info.outputs.reviewers }}"
+          echo "Developer: ${{ steps.pr_info.outputs.author }}"
+          echo "PR_Number: ${{ steps.pr_info.outputs.pull_request_number }}"
