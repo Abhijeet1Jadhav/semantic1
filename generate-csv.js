@@ -5,7 +5,7 @@ const octokit = new Octokit();
 
 async function generateCSV() {
   const owner = 'Abhijeet1Jadhav';
-  const repo = 'https://github.com/Abhijeet1Jadhav/semantic1.git';
+  const repo = 'semantic1';
 
   const { data: pullRequests } = await octokit.pulls.list({
     owner,
