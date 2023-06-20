@@ -18,12 +18,13 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-      - run: pip install pandas
-      - run: apt install python3-pip
-      - run: apt-get update && sudo apt-get upgrade 
-      - run: sudo apt install openssl
-      - run: pip3 install cffi
-      - run: pip3 install pygithub
+        run: 
+          pip install pandas
+          apt install python3-pip
+          apt-get update && sudo apt-get upgrade 
+          sudo apt install openssl
+          pip3 install cffi
+          pip3 install pygithub
 
       - name: Generate CSV
         run: python generate.py
