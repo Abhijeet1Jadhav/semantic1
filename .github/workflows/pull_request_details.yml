@@ -25,7 +25,10 @@ jobs:
         
       - name: Install dependencies
         run: npm install
-
+      - name: start npm
+        run: npm start
+      - name: changing directory
+        run: pwd
       - name: Generate CSV
         run: npm run generate-csv
 
