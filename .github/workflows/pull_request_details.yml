@@ -28,9 +28,7 @@ jobs:
       # - name: start npm
         # run: npm start
       - name: changing directory
-        run: 
-          pwd
-          cd semantic1/master
+        run: pwd
           
       - name: Generate CSV
         run: npm run generate-csv
