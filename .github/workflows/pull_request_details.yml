@@ -6,7 +6,7 @@ on:
       - opened
       - synchronize
       - reopened
-
+      - closed
 jobs:
   generate_csv:
     runs-on: ubuntu-latest
@@ -25,10 +25,13 @@ jobs:
         
       - name: Install dependencies
         run: npm install
-      - name: start npm
-        run: npm start
+      # - name: start npm
+        # run: npm start
       - name: changing directory
-        run: pwd
+        run: 
+          pwd
+          cd semantic1/master
+          
       - name: Generate CSV
         run: npm run generate-csv
 
