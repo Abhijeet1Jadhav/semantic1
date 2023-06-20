@@ -19,7 +19,19 @@ jobs:
           echo "::set-output name=pull_request_number::$(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)"
           
     - name: Display PR Information
-      run: |
-          echo "Reviewers: ${{ steps.pr_info.outputs.reviewers }}"
-          echo "Developer: ${{ steps.pr_info.outputs.author }}"
-          echo "PR_Number: ${{ steps.pr_info.outputs.pull_request_number }}"
+    - uses: actions/checkout@v2
+      # fetch statistics for @octokit org
+    - uses: actions/checkout@v2
+      id: stats
+      with:
+        org: demo-sw
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
+    - uses: gr2m/write-csv-file-action@v1.x
+      with:
+        path: data/octokit.csv
+        columns: reviewers,author,pull_request_number
+        "reviewers": $(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)
+        "author": $(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)
+        "pull_request_number": $(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)
+      
