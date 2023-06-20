@@ -39,6 +39,7 @@
     "git": "^0.1.5"
   },
   "devDependencies": {
-    "semantic-release": "^21.0.5"
+    "semantic-release": "^21.0.5",
+    "@octokit/rest": "^18.0.7"
   }
 }
