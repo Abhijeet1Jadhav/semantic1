@@ -20,9 +20,7 @@ jobs:
       - name: Install dependencies
         run: 
           pip install pandas
-          apt install python3-pip
-          apt-get update && sudo apt-get upgrade 
-          sudo apt install openssl
+          pip install python3-pip
           pip3 install cffi
           pip3 install pygithub
 
