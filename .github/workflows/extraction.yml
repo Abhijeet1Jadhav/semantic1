@@ -37,6 +37,6 @@ jobs:
     - run: git config --local user.name "GitHub Action"
     - run: git add data
     - run: git commit -m "data/octokit.csv updated"
-    - run: "git push https://Abhijeet1Jadhav:${GITHUB_TOKEN}@github.com/semantic1.git HEAD"
+    - run: "git push https://Abhijeet1Jadhav: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@github.com/semantic1.git HEAD"
       env:
        GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
