@@ -28,3 +28,11 @@ jobs:
 
       - name: Generate CSV
         run: python generate.py
+        
+      - name: push files to repo
+        run: |
+          git config --global user.name "Abhijeet1Jadhav"
+          git config --global user.email "jadhavabhijeet@gmail.com"
+          git add .
+          git commit -m "Add pull request details CSV"
+          git push
