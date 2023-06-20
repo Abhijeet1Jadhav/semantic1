@@ -38,6 +38,6 @@ jobs:
     - run: git add data
     - run: git commit -m "data/octokit.csv updated"
     - run: git remote set-url origin https://github.com/Abhijeet1Jadhav/semantic1.git
-    - run: git push https://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@github.com/Abhijeet1Jadhav/semantic1.git HEAD
+    - run: git push https://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@github.com/Abhijeet1Jadhav/semantic1.git master
       env:
        GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
