@@ -1,7 +1,7 @@
 name: extraction
 on:
   pull_request:
-    types: [closed]
+    types: [opened]
 
 jobs:
   build:
