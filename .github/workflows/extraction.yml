@@ -37,11 +37,11 @@ jobs:
     - run: git config --local user.email "action@github.com"
     - run: git config --local user.name "GitHub Action"
     - run: git config pull.rebase true
-    - run: git pull https://github.com/Abhijeet1Jadhav/semantic1.git
+    #- run: git pull https://github.com/Abhijeet1Jadhav/semantic1.git
     - run: git add data
     #- run: git add &lt;pathspec&gt; git commit -m "checked"
     #- run: git push
-    - run: git commit -m "data/octokit.csv updated"
+    - run: git commit -m "checked"
     - run: git remote set-url origin https://github.com/Abhijeet1Jadhav/semantic1.git
     - run: git push https://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@github.com/Abhijeet1Jadhav/semantic1.git HEAD:master
       env:
