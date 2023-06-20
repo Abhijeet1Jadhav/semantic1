@@ -43,6 +43,6 @@
     "@octokit/rest": "^18.0.7"
   },
   "scripts": {
-    "generate-csv": "semantic1/master/generate-csv.js"
+    "generate-csv": "master/generate-csv.js"
   }
 }
