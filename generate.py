@@ -8,7 +8,7 @@ g = Github(token)
 repo = g.get_repo('Abhijeet1Jadhav/semantic1')  # Replace with your repository details
 
 # Fetch pull requests
-pull_requests = repo.get_pulls(state='open')
+pull_requests = repo.get_pulls(state='closed')
 
 # Prepare data for CSV
 data = []
