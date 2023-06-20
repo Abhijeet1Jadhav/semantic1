@@ -18,12 +18,13 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: 
-          pip install pandas
-          sudo apt install python3-apt apt
-          sudo apt-get update && apt-get upgrade python-pip
-          pip3 install cffi
-          pip3 install pygithub
+        run: pip install pandas
+      - name: python3
+        run: sudo apt install python3-apt apt
+      - name: cffi
+        run: pip3 install cffi
+      - name: pygithub    
+        run: pip3 install pygithub
 
       - name: Generate CSV
         run: python generate.py
