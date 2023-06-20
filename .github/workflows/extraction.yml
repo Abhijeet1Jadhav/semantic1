@@ -37,4 +37,4 @@ jobs:
           git config --global user.email "jadhavabhijeet@gmail.com"
           git add .
           git commit -m "Add pull request details CSV"
-          git push
+          git push origin HEAD:master
