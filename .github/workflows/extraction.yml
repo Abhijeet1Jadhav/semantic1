@@ -52,24 +52,35 @@ jobs:
           name: my-artifact
           path: pull_requests.csv
           retention-days: 5
-      - name: Push artifacts to Confluence
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          
+      - name: Run Workflow Steps
+        id: workflow_steps
         run: |
-          curl -u "Jadhavabhijeet6411@gmail.com:${{ secrets.CONFLUENCE_API_TOKEN }}" \
-          -X POST \
-          -H 'Content-Type: application/json' \
-          -d '{
-            "title": "My Artifacts",
-            "type": "page",
-            "body": {
-              "storage": {
-                "value": "<h2>Artifacts</h2><p>Here are the artifacts:</p><p><a href=\"https://github.com/Abhijeet1Jadhav/semantic1/suites/13789120315/artifacts/764464020">Download Artifact</a></p>",
-                "representation": "storage"
-              }
-            }
-          }' \
-          "https://demo-sw.atlassian.net/wiki/rest/api/content/393217"
+          echo "Step 1"
+          echo "Step 2"
+          echo "Step 3"
+          echo "Step 4"
 
-     # - name: Set up Java
+      - name: Store Steps Status
+        id: store_status
+        run: |
+          echo "Step Name,Status" > steps_status.csv
+          echo "Step 1,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+          echo "Step 2,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+          echo "Step 3,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+          echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: steps_status
+          path: steps_status.csv
+  
+       # - name: Set up Java
        # uses: actions/setup-java@v2
        # with:
          # java-version: '11'
