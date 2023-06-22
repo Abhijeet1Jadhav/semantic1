@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: pr-details
-          path: pr-details.txt
+          path: data
       
   handle-failure:
     runs-on: ubuntu-latest
