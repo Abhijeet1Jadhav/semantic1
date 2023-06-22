@@ -48,8 +48,6 @@ jobs:
           name: my-artifact
           path: pull_requests.csv
           retention-days: 5
-          
-      - name: Push Artifacts to Confluence
 
       - name: Set up Java
         uses: actions/setup-java@v2
