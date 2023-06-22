@@ -48,21 +48,37 @@ jobs:
           name: my-artifact
           path: pull_requests.csv
           retention-days: 5
-
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-
-      - name: Install Confluence Publisher
+      - name: Push artifacts to Confluence
         run: |
-          wget -q -O /tmp/atlassian-cli-10.0.0-distribution.zip https://bobswift.atlassian.net/wiki/download/attachments/16285777/atlassian-cli-10.0.0-distribution.zip?api=v2
-          unzip /tmp/atlassian-cli-10.0.0-distribution.zip -d /tmp
-          mv /tmp/atlassian-cli-10.0.0 /usr/local/atlassian-cli
-          echo 'export PATH="$PATH:/usr/local/atlassian-cli/bin"' >> $GITHUB_ENV
+          curl -u "Jadhavabhijeet6411@gmail.com:${{ secrets.CONFLUENCE_API_TOKEN }}" \
+          -X POST \
+          -H 'Content-Type: application/json' \
+          -d '{
+            "title": "My Artifacts",
+            "type": "page",
+            "body": {
+              "storage": {
+                "value": "<h2>Artifacts</h2><p>Here are the artifacts:</p><p><a href=\"https://github.com/Abhijeet1Jadhav/semantic1/suites/13789120315/artifacts/764464020">Download Artifact</a></p>",
+                "representation": "storage"
+              }
+            }
+          }' \
+          "https://demo-sw.atlassian.net/wiki/rest/api/content/393217"
 
-      - name: Publish artifacts to Confluence
-        run: |
-          PAGE_ID="393217"
-          ARTIFACTS_DIR="semantic1/suites/13789120315/artifacts/"
-          confluence --server "https://demo-sw.atlassian.net/wiki" --user "jadhavabhijeet6411@gmail.com" --password "$CONFLUENCE_API_TOKEN" --action storePage --space "~71202026b01f91e1a3436291135759a5455a0" --title "Artifacts for PR ${{ github.event.pull_request.number }}" --parent $PAGE_ID --file "$ARTIFACTS_DIR/**/*"
+     # - name: Set up Java
+       # uses: actions/setup-java@v2
+       # with:
+         # java-version: '11'
+#
+      #- name: Install Confluence Publisher
+       # run: |
+          #wget -q -O /tmp/atlassian-cli-10.0.0-distribution.zip https://bobswift.atlassian.net/wiki/download/attachments/16285777/atlassian-cli-10.0.0-distribution.zip?api=v2
+         # unzip /tmp/atlassian-cli-10.0.0-distribution.zip -d /tmp
+         # mv /tmp/atlassian-cli-10.0.0 /usr/local/atlassian-cli
+         # echo 'export PATH="$PATH:/usr/local/atlassian-cli/bin"' >> $GITHUB_ENV
+
+      #- name: Publish artifacts to Confluence
+       # run: |
+          #PAGE_ID="393217"
+         #ARTIFACTS_DIR="semantic1/suites/13789120315/artifacts/"
+          #confluence --server "https://demo-sw.atlassian.net/wiki" --user "jadhavabhijeet6411@gmail.com" --password "$CONFLUENCE_API_TOKEN" --action storePage --space "~71202026b01f91e1a3436291135759a5455a0" --title "Artifacts for PR ${{ github.event.pull_request.number }}" --parent $PAGE_ID --file "$ARTIFACTS_DIR/**/*"
