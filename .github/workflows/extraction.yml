@@ -26,6 +26,10 @@ jobs:
       - name: pygithub    
         run: pip3 install pygithub
         
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       #- name: removing old file
        # run: rm -f pull_requests.csv
       - name: Generate CSV
