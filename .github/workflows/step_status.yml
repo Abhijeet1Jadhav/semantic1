@@ -1,42 +1,49 @@
-name: Collect Workflow Steps Status
+name: Workflow Example
 
 on:
-  push:
+  pull_request:
     branches:
-      - master
+      - main
 
 jobs:
-  collect_steps_status:
+  collect-details:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Run Workflow Steps
-        id: workflow_steps
+      - name: Collect PR details
         run: |
-          echo "Step 1"
-          echo "Step 2"
-          echo "Step 3"
-          echo "Step 4"
-
-      - name: Store Steps Status
-        id: store_status
+          echo "PR number: ${{ github.event.pull_request.number }}"
+          echo "PR title: ${{ github.event.pull_request.title }}"
+          echo "PR author: ${{ github.event.pull_request.user.login }}"
+        id: pr-details
+        
+      - name: Print PR details
         run: |
-          echo "Step Name,Status" > steps_status.csv
-          echo "Step 1,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-          echo "Step 2,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-          echo "Step 3,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-          echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-
-      - name: Upload Artifacts
+          echo "PR details: ${{ steps.pr-details.outputs }}"
+          
+      - name: Save PR details artifact
         uses: actions/upload-artifact@v2
         with:
-          name: steps_status
-          path: steps_status.csv
+          name: pr-details
+          path: ./pr-details.txt
+      
+  handle-failure:
+    runs-on: ubuntu-latest
+    needs: collect-details
+
+    steps:
+      - name: Handle job failure
+        if: ${{ failure() }}
+        run: |
+          echo "Job failed with error: ${{ job.status }}"
+          echo "Error message: ${{ job.message }}"
+          
+      - name: Save job failure artifact
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: job-failure
+          path: ./job-failure.txt
