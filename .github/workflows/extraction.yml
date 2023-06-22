@@ -31,15 +31,20 @@ jobs:
       - name: Generate CSV
         run: python generate.py
         
-      - name: push files to repo
-        run: |
-          git config --global user.name "Abhijeet1Jadhav"
-          git config --global user.email "jadhavabhijeet@gmail.com"
-          git fetch origin master
-          #git merge  master
-          git fetch origin master:tmp
-          git rebase tmp
-          git add .
-          git commit -m "Add pull request details CSV"
-          git push origin HEAD:master
-          
+      #- name: push files to repo
+        #run: |
+         # git config --global user.name "Abhijeet1Jadhav"
+         #git config --global user.email "jadhavabhijeet@gmail.com"
+         # git fetch origin master
+         # #git merge  master
+          #git fetch origin master:tmp
+         # git rebase tmp
+         # git add .
+         # git commit -m "Add pull request details CSV"
+          #git push origin HEAD:master
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: output.csv
+          retention-days: 5
