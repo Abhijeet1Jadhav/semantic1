@@ -20,7 +20,7 @@ jobs:
         run: npm install
 
       - name: Generate CSV Report
-        run: node report.js
+        run: node report.cjs
 
       - name: Upload CSV Report
         uses: actions/upload-artifact@v2
