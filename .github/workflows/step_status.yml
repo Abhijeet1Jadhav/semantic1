@@ -17,7 +17,7 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install && npm i csv-parse
 
       - name: Generate CSV Report
         run: node report.cjs
