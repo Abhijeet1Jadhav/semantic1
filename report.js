@@ -7,7 +7,7 @@ const stringify = require("csv-stringify");
 const token = process.env.GITHUB_TOKEN;
 
 // Repository owner and name
-const owner = "Abhijeet;
+const owner = "Abhijeet1Jadhav;
 const repo = "semantic1;
 
 // Path to the CSV report file
