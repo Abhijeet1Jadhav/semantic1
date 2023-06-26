@@ -40,4 +40,4 @@ jobs:
       
     - name: Run Python script
       run: |
-        python export_data_to_csv.py ${{ env.CSV_FILE_NAME }}
+        python workflow_status.csv ${{ secrets.RELEASE_GIT_TOKEN }}
