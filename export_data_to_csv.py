@@ -3,13 +3,14 @@ import csv
 from github import Github
 
 # Get the GitHub token
-token = os.environ['GITHUB_TOKEN']
-
-# Create a GitHub instance
+token = os.getenv('RELEASE_GIT_TOKEN')
 g = Github(token)
+repo = g.get_repo('Abhijeet1Jadhav/semantic1')
+# Create a GitHub instance
+#g = Github(token)
 
 # Get the repository and pull request details
-repo = g.get_repo('Abhijeet1Jadhav/semantic1')  # Replace with your repository details
+#repo = g.get_repo('Abhijeet1Jadhav/semantic1')  # Replace with your repository detailsd
 pulls = repo.get_pulls(state='closed')  # Modify the pull request state as needed
 
 # Prepare the data for CSV
