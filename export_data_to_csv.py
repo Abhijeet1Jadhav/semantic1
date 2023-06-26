@@ -3,7 +3,7 @@ import csv
 from github import Github
 
 # Get the GitHub token
-token = os.environ['RELEASE_GIT_TOKEN']
+token = os.environ['GITHUB_TOKEN']
 
 # Create a GitHub instance
 g = Github(token)
