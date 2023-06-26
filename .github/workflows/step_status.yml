@@ -22,6 +22,14 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x' # Replace with your desired Python version
+    - name: Install dependencies
+        run: pip install pandas
+    - name: python3
+        run: sudo apt install python3-apt apt
+    - name: cffi
+        run: pip3 install cffi
+    - name: pygithub    
+        run: pip3 install pygithub
 
    # - name: Install dependencies
    #   run: pip install -r requirements.txt # If you have any dependencies, add them to requirements.txt file
