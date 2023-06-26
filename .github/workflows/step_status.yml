@@ -1,8 +1,8 @@
 name: Capture Step Status
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types:
+      - closed
 jobs:
   capture_status:
     runs-on: ubuntu-latest
