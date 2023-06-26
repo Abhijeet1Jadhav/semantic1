@@ -3,6 +3,8 @@ import csv
 from github import Github
 
 # Get the GitHub token
+env:
+GITHUB_TOKEN: ${{secrets.RELEASE_GIT_TOKEN}}
 token = os.environ['GITHUB_TOKEN']
 
 # Create a GitHub instance
