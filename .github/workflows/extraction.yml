@@ -73,7 +73,13 @@ jobs:
           echo "Step 2,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
           echo "Step 3,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
           echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-
+          
+      - name: Print Step Status
+        run: |
+          echo "Step 1 Status: ${{ job.status }}"
+          echo "Step 2 Status: ${{ job.status }}"
+          echo "Step 3 Status: ${{ job.status }}"
+          
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
