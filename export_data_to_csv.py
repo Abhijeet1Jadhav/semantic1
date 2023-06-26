@@ -6,42 +6,31 @@ from github import Github
 token = os.getenv('RELEASE_GIT_TOKEN')
 g = Github(token)
 repo = g.get_repo('Abhijeet1Jadhav/semantic1')
-workflow_run = repo.get_workflow_runs()[0]
-workflow_run_id = workflow_run.id
+# Get the path to the workflow file
 
-# Get the workflow run details
-workflow_run_details = repo.get_workflow_run(workflow_run_id)
+workflow_file_path = '.github/workflows/extraction.yml'
 
-# Get the environment deployments status
-#environment_deployments = workflow_run_details.get_environments()
+# Read the workflow file
+with open(workflow_file_path, 'r') as file:
+    workflow_content = file.read()
 
-# Get the step and job status
-steps = workflow_run_details.get_steps()
-jobs = workflow_run_details.get_jobs()
+# Extract step names and their status from the workflow content
+steps = []
+status = []
+for line in workflow_content.splitlines():
+    if 'name:' in line:
+        steps.append(line.split('name:')[-1].strip())
+    if 'conclusion:' in line:
+        status.append(line.split('conclusion:')[-1].strip())
 
 # Create a dictionary to store the information
 data = {
-    'Environment': [],
-    'Deployment Status': [],
-    'Step Status': [],
-    'Job Status': []
+    'Step': steps,
+    'Status': status
 }
-
-# Process the environment deployments status
-# for environment in environment_deployments:
-    # data['Environment'].append(environment.environment)
-    # data['Deployment Status'].append(environment.status)
-
-# Process the step status
-for step in steps:
-    data['Step Status'].append(step.conclusion)
-
-# Process the job status
-for job in jobs:
-    data['Job Status'].append(job.conclusion)
 
 # Create a DataFrame from the data dictionary
 df = pd.DataFrame(data)
 
 # Save the DataFrame to a CSV file
-df.to_csv('workflow_status.csv', index=False)
+df.to_csv('step_status.csv', index=False)
