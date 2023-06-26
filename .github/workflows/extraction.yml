@@ -10,9 +10,11 @@ jobs:
 
     steps:
       - name: Checkout code
+        id: step1
         uses: actions/checkout@v2
 
       - name: Set up Python
+        id: step2
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
@@ -78,7 +80,7 @@ jobs:
         run: |
           echo "Step Name, Status" > steps_status.csv
           echo " ${{ steps.step1.name }}, ${{ job.status }}" >> steps_status.csv
-          echo "Step 2 Status: ${{ job.status }}" >> steps_status.csv
+          echo " ${{ steps.step2.name }}, ${{ job.status }}" >> steps_status.csv
           echo "Step 3 Status: ${{ job.status }}" >> steps_status.csv
           
       - name: Upload Artifacts
