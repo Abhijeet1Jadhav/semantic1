@@ -12,7 +12,7 @@ repo = g.get_repo('Abhijeet1Jadhav/semantic1')
 # Get the repository and pull request details
 #repo = g.get_repo('Abhijeet1Jadhav/semantic1')  # Replace with your repository detailsd
 pulls = repo.get_pulls(state='closed')  # Modify the pull request state as needed
-latest_pull_request = pull_requests[0]  # Assumes the latest pull request is at index 0
+latest_pull_request = pulls[0]  # Assumes the latest pull request is at index 0
 # Get the head commit of the latest pull request
 head_commit = latest_pull_request.head.sha
 
