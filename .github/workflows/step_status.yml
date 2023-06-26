@@ -40,4 +40,4 @@ jobs:
       
     - name: Run Python script
       run: |
-        python export_data_to_csv.py ${{ secrets.RELEASE_GIT_TOKEN }}
+        python export_data_to_csv.py
