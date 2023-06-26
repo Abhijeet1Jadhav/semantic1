@@ -6,40 +6,42 @@ from github import Github
 token = os.getenv('RELEASE_GIT_TOKEN')
 g = Github(token)
 repo = g.get_repo('Abhijeet1Jadhav/semantic1')
-# Create a GitHub instance
-#g = Github(token)
+workflow_run = repo.get_workflow_runs()[0]
+workflow_run_id = workflow_run.id
 
-# Get the repository and pull request details
-#repo = g.get_repo('Abhijeet1Jadhav/semantic1')  # Replace with your repository detailsd
-pulls = repo.get_pulls(state='closed')  # Modify the pull request state as needed
-latest_pull_request = pulls[0]  # Assumes the latest pull request is at index 0
-# Get the head commit of the latest pull request
-head_commit = latest_pull_request.head.sha
+# Get the workflow run details
+workflow_run_details = repo.get_workflow_run(workflow_run_id)
 
-# Get the check runs for the head commit
-check_runs = repo.get_commit(head_commit).get_check_runs()
-# Prepare the data for CSV
-data = [['Pull Request Number', 'Pull Request Title', 'Deployment Status', 'Workflow Step Status']]
+# Get the environment deployments status
+environment_deployments = workflow_run_details.get_environments()
 
-for pull in pulls:
-    # Get the deployment status for the pull request
-    # Modify this logic to retrieve the correct deployment status based on your requirements
-    deployment_status = 'Get deployment status here'
+# Get the step and job status
+steps = workflow_run_details.get_steps()
+jobs = workflow_run_details.get_jobs()
 
-    # Get the workflow runs for the pull request
-   # workflow_runs = pull.get_check_runs()
-    workflow_runs = repo.get_commit(head_commit).get_check_runs()
+# Create a dictionary to store the information
+data = {
+    'Environment': [],
+    'Deployment Status': [],
+    'Step Status': [],
+    'Job Status': []
+}
 
-    # Loop through each workflow run and get the step status
-    for run in workflow_runs:
-        # Modify this logic to retrieve the correct step status based on your requirements
-        step_status = 'Get step status here'
+# Process the environment deployments status
+for environment in environment_deployments:
+    data['Environment'].append(environment.environment)
+    data['Deployment Status'].append(environment.status)
 
-        # Append the data to the list
-        data.append([pull.number, pull.title, deployment_status, step_status])
+# Process the step status
+for step in steps:
+    data['Step Status'].append(step.conclusion)
 
-# Export data to CSV
-csv_file_name = sys.argv[1]
-with open(csv_file_name, 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerows(data)
+# Process the job status
+for job in jobs:
+    data['Job Status'].append(job.conclusion)
+
+# Create a DataFrame from the data dictionary
+df = pd.DataFrame(data)
+
+# Save the DataFrame to a CSV file
+df.to_csv('workflow_status.csv', index=False)
