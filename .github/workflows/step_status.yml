@@ -12,6 +12,7 @@ on:
 
 env:
   CSV_FILE_NAME: 'pr_environment_status.csv'
+  GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
   
 jobs:
   build:
