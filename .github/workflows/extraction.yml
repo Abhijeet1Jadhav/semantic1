@@ -65,20 +65,20 @@ jobs:
           echo "Step 3"
           echo "Step 4"
 
-      - name: Store Steps Status
-        id: store_status
-        run: |
-          echo "Step Name,Status" > steps_status.csv
-          echo "Step 1,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-          echo "Step 2,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-          echo "Step 3,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-          echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+      #- name: Store Steps Status
+        #id: store_status
+      #  run: |
+         # echo "Step Name,Status" > steps_status.csv
+          #echo "Step 1,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+          #echo "Step 2,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+          #echo "Step 3,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+         # echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
           
       - name: Print Step Status
         run: |
-          echo "Step 1 Status: ${{ job.status }}"
-          echo "Step 2 Status: ${{ job.status }}"
-          echo "Step 3 Status: ${{ job.status }}"
+          echo "Step 1 Status: ${{ job.status }}" >> steps_status.csv
+          echo "Step 2 Status: ${{ job.status }}" >> steps_status.csv
+          echo "Step 3 Status: ${{ job.status }}" >> steps_status.csv
           
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
