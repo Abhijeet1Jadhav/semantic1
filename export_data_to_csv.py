@@ -12,7 +12,8 @@ repo = g.get_repo('Abhijeet1Jadhav/semantic1')
 # Get the repository and pull request details
 #repo = g.get_repo('Abhijeet1Jadhav/semantic1')  # Replace with your repository detailsd
 pulls = repo.get_pulls(state='closed')  # Modify the pull request state as needed
-
+head_commit = pulls.head.commit
+check_runs = head_commit.get_check_runs()
 # Prepare the data for CSV
 data = [['Pull Request Number', 'Pull Request Title', 'Deployment Status', 'Workflow Step Status']]
 
@@ -22,7 +23,8 @@ for pull in pulls:
     deployment_status = 'Get deployment status here'
 
     # Get the workflow runs for the pull request
-    workflow_runs = pull.get_check_runs()
+   # workflow_runs = pull.get_check_runs()
+    workflow_runs = head_commit.get_check_runs()
 
     # Loop through each workflow run and get the step status
     for run in workflow_runs:
