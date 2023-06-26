@@ -76,7 +76,8 @@ jobs:
           
       - name: Print Step Status
         run: |
-          echo "Step 1 Status: ${{ job.status }}" >> steps_status.csv
+          echo "Step Name, Status" > steps_status.csv
+          echo " ${{ job.name }} : ${{ job.status }}" >> steps_status.csv
           echo "Step 2 Status: ${{ job.status }}" >> steps_status.csv
           echo "Step 3 Status: ${{ job.status }}" >> steps_status.csv
           
