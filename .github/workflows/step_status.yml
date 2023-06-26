@@ -4,26 +4,28 @@ on:
     types:
       - closed
 
+  workflow_run:
+    workflows:
+      - 'Print PR Details to CSV'
+    types:
+      - completed
+
+env:
+  CSV_FILE_NAME: 'pr_environment_status.csv'
+  
 jobs:
-  generate_report:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' # Replace with your desired Python version
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install && npm i csv-parse && npm i csv-stringify
-
-      - name: Generate CSV Report
-        run: node report.cjs
-
-      - name: Upload CSV Report
-        uses: actions/upload-artifact@v2
-        with:
-          name: csv-report
-          path: report.csv
+   # - name: Install dependencies
+   #   run: pip install -r requirements.txt # If you have any dependencies, add them to requirements.txt file
+      
+    - name: Run Python script
+      run: |
+        python export_data_to_csv.py ${{ env.CSV_FILE_NAME }}
