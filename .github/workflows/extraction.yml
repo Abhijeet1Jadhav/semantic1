@@ -79,9 +79,9 @@ jobs:
       - name: Print Step Status
         run: |
           echo "Step Name, Status" > steps_status.csv
-          echo " ${{ steps.step1.name }}, ${{ job.status }}" >> steps_status.csv
+          echo " ${{ Job.steps.step1.name }}, ${{ job.status }}" >> steps_status.csv
+          echo " ${{ job.steps['workflow_steps'].name }}, ${{ job.status }}" >> steps_status.csv
           echo " ${{ steps.step2.name }}, ${{ job.status }}" >> steps_status.csv
-          echo "Step 3 Status: ${{ job.status }}" >> steps_status.csv
           
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
