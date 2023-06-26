@@ -13,7 +13,7 @@ workflow_run_id = workflow_run.id
 workflow_run_details = repo.get_workflow_run(workflow_run_id)
 
 # Get the environment deployments status
-environment_deployments = workflow_run_details.get_environments()
+#environment_deployments = workflow_run_details.get_environments()
 
 # Get the step and job status
 steps = workflow_run_details.get_steps()
@@ -28,9 +28,9 @@ data = {
 }
 
 # Process the environment deployments status
-for environment in environment_deployments:
-    data['Environment'].append(environment.environment)
-    data['Deployment Status'].append(environment.status)
+# for environment in environment_deployments:
+    # data['Environment'].append(environment.environment)
+    # data['Deployment Status'].append(environment.status)
 
 # Process the step status
 for step in steps:
