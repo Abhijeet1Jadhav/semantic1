@@ -4,7 +4,7 @@ from github import Github
 import pandas as pd
 
 # Get the workflow run ID
-workflow_run_id = int(os.getenv('GITHUB_EVENT_WORKFLOW_RUN_ID'))
+workflow_run_id = str(os.getenv('GITHUB_EVENT_WORKFLOW_RUN_ID'))
 
 # Get the GitHub token
 token = os.getenv('GITHUB_TOKEN')
