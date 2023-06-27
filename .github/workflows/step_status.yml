@@ -22,6 +22,7 @@ jobs:
         sudo apt install python3-apt apt
         pip3 install cffi
         pip3 install pygithub
+        pip3 install pandas
         # ip nstall -r requirements.txt  # Replace with your dependencies file if needed
 
     - name: Run steps and capture statuses
