@@ -1,7 +1,7 @@
 {
   "name": "test-r1",
   "description": "semantic-release plugin to publish a GitHub release and comment on released Pull Requests/Issues",
-  "version": "0.0.0-development",
+  "version": "1.4.0-development",
   "type": "module",
   "author": "Abhijeet",
   "release": {
@@ -39,6 +39,10 @@
     "git": "^0.1.5"
   },
   "devDependencies": {
-    "semantic-release": "^21.0.5"
+    "semantic-release": "^21.0.5",
+    "@octokit/rest": "^18.0.7"
+  },
+  "scripts": {
+    "generate-csv": "generate-csv.js"
   }
 }

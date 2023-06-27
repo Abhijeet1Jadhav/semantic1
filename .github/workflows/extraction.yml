@@ -1,42 +1,115 @@
-name: extraction
+name: Print PR Details to CSV
 on:
   pull_request:
-    types: [closed]
+    types:
+      - closed
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Get PR Information
-      id: pr_info
-      run: |
-          echo "::set-output name=reviewers::$(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)"
-          echo "::set-output name=author::$(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)"
-          echo "::set-output name=pull_request_number::$(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        id: step2
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        id: step1
+        run: |
+          pip install pandas
+          echo "::set-output name=step1_output::Step 1 Output"
+        
+      - name: python3
+        run: sudo apt install python3-apt apt
+      - name: cffi
+        run: pip3 install cffi
+      - name: pygithub    
+        run: pip3 install pygithub
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      #- name: removing old file
+       # run: rm -f pull_requests.csv
+      - name: Generate CSV
+        run: python generate.py
+        
+      #- name: push files to repo
+        #run: |
+         # git config --global user.name "Abhijeet1Jadhav"
+         #git config --global user.email "jadhavabhijeet@gmail.com"
+         # git fetch origin master
+         # #git merge  master
+          #git fetch origin master:tmp
+         # git rebase tmp
+         # git add .
+         # git commit -m "Add pull request details CSV"
+          #git push origin HEAD:master
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: pull_requests.csv
+          retention-days: 5
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
           
-    - name: Display PR Information
-      uses: actions/checkout@v2
-      # fetch statistics for @octokit org
-    - uses: actions/checkout@v2
-      id: stats
-      with:
-        org: demo-sw
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
-    - uses: gr2m/write-csv-file-action@v1.x
-      with:
-        path: data/octokit.csv
-        columns: reviewers,author,pull_request_number
-        "reviewers": $(jq -r '.pull_request.requested_reviewers[].login' $GITHUB_EVENT_PATH)
-        "author": $(jq -r '.pull_request.user.login' $GITHUB_EVENT_PATH)
-        "pull_request_number": $(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)
-    - run: git config --local user.email "action@github.com"
-    - run: git config --local user.name "GitHub Action"
-    - run: git add data
-    - run: git commit -m "data/octokit.csv updated"
-    - run: "git push https://Abhijeet1Jadhav:${GITHUB_TOKEN}@github.com/semantic1.git HEAD"
-      env:
-       GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
+      - name: Run Workflow Steps
+        id: workflow_steps
+        run: |
+          echo "Step 1"
+          echo "Step 2"
+          echo "Step 3"
+          echo "Step 4"
+
+      #- name: Store Steps Status
+        #id: store_status
+      #  run: |
+         # echo "Step Name,Status" > steps_status.csv
+          #echo "Step 1,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+          #echo "Step 2,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+          #echo "Step 3,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+         # echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
+      - name: Export Outputs to CSV
+        run: |
+          echo "Step Name,Output" > steps_status.csv
+          echo "${{ steps.step1.outputs.step1_output }}" >> steps_status.csv
+          echo "Step 2,${{ steps.step2.outputs.step2_output }}" >> steps_status.csv
+     # - name: Print Step Status
+       # run: |
+         # echo "Step Name, Status" > steps_status.csv
+         # echo " ${{ Job.steps.step1.name }}, ${{ job.status }}" >> steps_status.csv
+         # echo " ${{ job.steps['workflow_steps'].name }}, ${{ job.status }}" >> steps_status.csv
+         # echo " ${{ steps.step2.name }}, ${{ job.status }}" >> steps_status.csv
+          
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: steps_status
+          path: steps_status.csv
+  
+       # - name: Set up Java
+       # uses: actions/setup-java@v2
+       # with:
+         # java-version: '11'
+#
+      #- name: Install Confluence Publisher
+       # run: |
+          #wget -q -O /tmp/atlassian-cli-10.0.0-distribution.zip https://bobswift.atlassian.net/wiki/download/attachments/16285777/atlassian-cli-10.0.0-distribution.zip?api=v2
+         # unzip /tmp/atlassian-cli-10.0.0-distribution.zip -d /tmp
+         # mv /tmp/atlassian-cli-10.0.0 /usr/local/atlassian-cli
+         # echo 'export PATH="$PATH:/usr/local/atlassian-cli/bin"' >> $GITHUB_ENV
+
+      #- name: Publish artifacts to Confluence
+       # run: |
+          #PAGE_ID="393217"
+         #ARTIFACTS_DIR="semantic1/suites/13789120315/artifacts/"
+          #confluence --server "https://demo-sw.atlassian.net/wiki" --user "jadhavabhijeet6411@gmail.com" --password "$CONFLUENCE_API_TOKEN" --action storePage --space "~71202026b01f91e1a3436291135759a5455a0" --title "Artifacts for PR ${{ github.event.pull_request.number }}" --parent $PAGE_ID --file "$ARTIFACTS_DIR/**/*"

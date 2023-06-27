@@ -1,0 +1,42 @@
+name: Pull Request Details to CSV
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+jobs:
+  generate_csv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: cleaning cache
+        run: npm cache clean --force
+        
+      - name: Install dependencies
+        run: npm install
+      # - name: start npm
+        # run: npm start
+      - name: changing directory
+        run: pwd
+          
+      - name: Generate CSV
+        run: npm run generate-csv
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Add pull request details CSV"
+          git push
