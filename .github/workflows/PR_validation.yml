@@ -1,17 +1,26 @@
 name: PR Workflow
 
-on: 
+on:
   pull_request:
-    types: closed
-
+    types:
+      - closed
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
+      id: step1
       uses: actions/checkout@v2
-    - name: Get PR Information
+      
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        sudo apt install python3-apt apt
+        pip3 install cffi
+        pip3 install pygithub
+        pip3 install pandas
+        # ip nstall -r requirements.txt  # Replace with your dependencies file if needed
     
     - name: run the file
       run : python index.py
