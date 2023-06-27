@@ -75,26 +75,17 @@ jobs:
           #echo "Step 2,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
           #echo "Step 3,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
          # echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
-      - name: Print Workflow Information
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
+      - name: Export Outputs to CSV
         run: |
-          echo "Workflow Status: ${{ github.event.workflow_run.status }}"
-          echo "Deployment Status: ${{ github.event.deployment_status.state }}"
-
-          echo "Step Statuses:"
-          for step in "${{ steps.* }}"; do
-            step_name=$(echo "$step" | cut -d'.' -f2)
-            step_status=$(echo "$step" | jq -r '.outcome')
-
-            echo "Step $step_name: $step_status"
-          done
-      - name: Print Step Status
-        run: |
-          echo "Step Name, Status" > steps_status.csv
-          echo " ${{ Job.steps.step1.name }}, ${{ job.status }}" >> steps_status.csv
-          echo " ${{ job.steps['workflow_steps'].name }}, ${{ job.status }}" >> steps_status.csv
-          echo " ${{ steps.step2.name }}, ${{ job.status }}" >> steps_status.csv
+          echo "Step Name,Output" > outputs.csv
+          echo "Step 1,${{ steps.step1.outputs.step1_output }}" >> steps_status.csv
+          echo "Step 2,${{ steps.step2.outputs.step2_output }}" >> steps_status.csv
+     # - name: Print Step Status
+       # run: |
+         # echo "Step Name, Status" > steps_status.csv
+         # echo " ${{ Job.steps.step1.name }}, ${{ job.status }}" >> steps_status.csv
+         # echo " ${{ job.steps['workflow_steps'].name }}, ${{ job.status }}" >> steps_status.csv
+         # echo " ${{ steps.step2.name }}, ${{ job.status }}" >> steps_status.csv
           
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
