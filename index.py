@@ -5,7 +5,7 @@ import os
 repository_owner = 'Abhijeet1Jadhav'
 repository_name = 'semantic1'
 workflow_name = 'Deployment'
-auth_token = os.environ['RELEASE_GIT_TOKEN']
+auth_token = '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'
 
 def fetch_workflow_runs():
     url = f"https://api.github.com/repos/{repository_owner}/{repository_name}/actions/workflows/{workflow_name}/runs"
