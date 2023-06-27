@@ -11,7 +11,7 @@ url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/actions/runs/{work
 headers = {"Authorization": f"Bearer {access_token}"}
 response = requests.get(url, headers=headers)
 response_json = response.json()
-workflow_jobs = response_json["workflow_run_id"]["jobs"]
+workflow_jobs = response_json["workflow_runs"]["jobs"]
 
 # Extract job steps outputs and store in CSV
 output_rows = []
