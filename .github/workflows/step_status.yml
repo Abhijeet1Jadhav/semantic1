@@ -11,6 +11,9 @@ jobs:
     - name: Checkout repository
       id: step1
       uses: actions/checkout@v2
+      env:
+        STEP1_STATUS: ${{ job.status }}
+      
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -25,10 +28,11 @@ jobs:
         pip3 install pygithub
         pip3 install pandas
         # ip nstall -r requirements.txt  # Replace with your dependencies file if needed
-
+    - name: rpint steps
+      run : echo "Step 1 Status:${{ needs.step1.outputs.step1_status }}"
     - name: Run steps and capture statuses
       run: python capture_statuses.py  # Replace with your Python script file name
-
+    
     - name: Archive step statuses
       uses: actions/upload-artifact@v2
       with:
