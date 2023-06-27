@@ -20,6 +20,7 @@ jobs:
         pip3 install cffi
         pip3 install pygithub
         pip3 install pandas
+        pip install requests
         # ip nstall -r requirements.txt  # Replace with your dependencies file if needed
     
     - name: run the file
