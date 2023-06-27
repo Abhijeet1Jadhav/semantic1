@@ -4,20 +4,31 @@ on:
     types:
       - closed
 jobs:
-  capture_status:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Replace with the desired Python version
 
-      - name: Install dependencies
-        run: pip install pandas PyGithub
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        sudo apt install python3-apt apt
+        pip3 install cffi
+        pip3 install pygithub
+        # ip nstall -r requirements.txt  # Replace with your dependencies file if needed
 
-      - name: Capture Step Status
-        run: |
-          python capture_step_status.py ${{ github.event.workflow_run.id }} ${{ secrets.RELEASE_GIT_TOKEN}}
+    - name: Run steps and capture statuses
+      run: python capture_statuses.py  # Replace with your Python script file name
+
+    - name: Archive step statuses
+      uses: actions/upload-artifact@v2
+      with:
+        name: step-statuses
+        path: statuses.txt  # Replace with the path to your captured statuses file
