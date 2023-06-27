@@ -10,8 +10,6 @@ jobs:
 
     steps:
       - name: Checkout code
-        id: step1
-        run: echo "::set-output name=step1_output::Step 1 Output"
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -21,7 +19,11 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install pandas
+        id: step1
+        run: |
+          pip install pandas
+          echo "::set-output name=step1_output::Step 1 Output"
+        
       - name: python3
         run: sudo apt install python3-apt apt
       - name: cffi
