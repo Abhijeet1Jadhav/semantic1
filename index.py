@@ -4,7 +4,7 @@ import csv
 workflow_run_id = "9781817810"
 repo_owner = "Abhijeet1Jadhav"
 repo_name = "semantic1"
-access_token = "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"
+access_token = "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"
 
 # Get the workflow run details
 url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/actions/runs/{workflow_run_id}"
