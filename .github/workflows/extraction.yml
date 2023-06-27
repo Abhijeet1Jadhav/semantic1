@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout code
         id: step1
+        run: echo "::set-output name=step1_output::Step 1 Output"
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -77,8 +78,8 @@ jobs:
          # echo "Step 4,${{ job.steps['workflow_steps'].conclusion }}" >> steps_status.csv
       - name: Export Outputs to CSV
         run: |
-          echo "Step Name,Output" > outputs.csv
-          echo "Step 1,${{ steps.step1.outputs.step1_output }}" >> steps_status.csv
+          echo "Step Name,Output" > steps_status.csv
+          echo "${{ steps.step1.outputs.step1_output }}" >> steps_status.csv
           echo "Step 2,${{ steps.step2.outputs.step2_output }}" >> steps_status.csv
      # - name: Print Step Status
        # run: |
