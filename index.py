@@ -1,20 +1,33 @@
 import requests
 import csv
 
-workflow_run_id = "9781817810"
-repo_owner = "Abhijeet1Jadhav"
-repo_name = "semantic1"
-access_token = "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"
+repository_owner = 'Abhijeet1Jadhav'
+repository_name = 'semantic1'
+workflow_name = 'Deployment'
+auth_token = os.environ['RELEASE_GIT_TOKEN']
 
-# Get the workflow run details
-url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/actions/runs/{workflow_run_id}"
-headers = {"Authorization": f"Bearer {access_token}"}
-response = requests.get(url, headers=headers)
-response_json = response.json()
-workflow_jobs = response_json["workflow_runs"]["jobs"]
+def fetch_workflow_runs():
+    url = f"https://api.github.com/repos/{repository_owner}/{repository_name}/actions/workflows/{workflow_name}/runs"
+    headers = {
+        'Authorization': f'token {auth_token}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
 
-# Extract job steps outputs and store in CSV
-output_rows = []
-for job in workflow_jobs:
-    job_name = job["name"]
-    steps = job["steps"]
+def write_workflow_runs_to_csv(workflow_runs):
+    with open('workflow_runs.csv', 'w', newline='') as csvfile:
+        fieldnames = ['Run ID', 'Status', 'Conclusion']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        
+        for run in workflow_runs['workflow_runs']:
+            writer.writerow({
+                'Run ID': run['id'],
+                'Status': run['status'],
+                'Conclusion': run['conclusion']
+            })
+
+workflow_runs = fetch_workflow_runs()
+write_workflow_runs_to_csv(workflow_runs)
