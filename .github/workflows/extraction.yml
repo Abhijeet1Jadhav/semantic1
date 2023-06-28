@@ -5,7 +5,7 @@ on:
       - closed
 
 jobs:
-  build:
+  Dev_Deployment:
     runs-on: ubuntu-latest
 
     steps:
