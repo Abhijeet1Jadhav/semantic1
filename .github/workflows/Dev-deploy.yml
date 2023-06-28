@@ -3,10 +3,6 @@ name: Deployment
 concurrency: Development
 
 on:
-  #workflow_run:
-   # workflows: [PR Workflow]
-    #types: 
-     # - completed
   pull_request:
     types:
       - closed
