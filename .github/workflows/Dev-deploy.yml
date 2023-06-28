@@ -3,13 +3,15 @@ name: Deployment
 concurrency: Development
 
 on:
-  workflow_run:
-    workflows: [PR Workflow]
-    types: 
-      - completed
-
+  #workflow_run:
+   # workflows: [PR Workflow]
+    #types: 
+     # - completed
+  pull_request:
+    types:
+      - closed
 jobs:
-  deployment:
+  Dev_Deployment:
     runs-on: ubuntu-latest
     environment: Development
     steps:
