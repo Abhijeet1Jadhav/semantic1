@@ -1,34 +1,33 @@
-name: Capture Step Status
-on: workflow_dispatch
+name: Workflow Steps Capture
+
+on:
+  push:
+  pull_request:
 
 jobs:
-  build:
+  capture_steps:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      id: step1
-      uses: actions/checkout@v2
-      
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'  # Replace with the desired Python version
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        sudo apt install python3-apt apt
-        pip3 install cffi
-        pip3 install pygithub
-        pip3 install pandas
-        # ip nstall -r requirements.txt  # Replace with your dependencies file if needed
-        
-    - name: Run steps and capture statuses
-      run: python capture_statuses.py  # Replace with your Python script file name
-    
-    - name: Archive step statuses
-      uses: actions/upload-artifact@v2
-      with:
-        name: step-statuses
-        path: workflow_steps_status.csv  # Replace with the path to your captured statuses file
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub requests
+
+      - name: Capture Workflow Steps
+        run: |
+          python Step_statuses.py
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: workflow_steps
+          path: workflow_steps_status.csv
