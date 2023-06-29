@@ -61,12 +61,16 @@ if response.status_code == 200:
                 for step in job['steps']:
                     step_name = step['name']
                     status = step['conclusion'] if step['conclusion'] else 'in_progress'
+                    creation_date = step['started_at']
+                    finished_date = step['completed_at']
 
                     steps_status.append({
                         'Run ID': run_id,
                         'Job Name': job_name,
                         'Step Name': step_name,
                         'Status': status,
+                        'Creation_date': creation_date,
+                        'Finished_date': finished_date,
                         'Pull Request Number': pr_number,
                         'Pull Request Title': pr_title
                     })
@@ -80,7 +84,7 @@ if response.status_code == 200:
 
     # Write the steps status to a CSV file
     with open(csv_file, mode='w', newline='') as file:
-        fieldnames = ['Run ID', 'Job Name', 'Step Name', 'Status', 'Pull Request Number', 'Pull Request Title']
+        fieldnames = ['Run ID', 'Job Name', 'Step Name', 'Status', 'Creation_date', 'Finished_date', 'Pull Request Number', 'Pull Request Title']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
 
         writer.writeheader()
