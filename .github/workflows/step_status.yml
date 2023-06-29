@@ -1,8 +1,6 @@
 name: Capture Step Status
-on:
-  pull_request:
-    types:
-      - closed
+on: workflow_dispatch
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,10 +9,7 @@ jobs:
     - name: Checkout repository
       id: step1
       uses: actions/checkout@v2
-      env:
-        STEP1_STATUS: ${{ job.status }}
       
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -28,8 +23,7 @@ jobs:
         pip3 install pygithub
         pip3 install pandas
         # ip nstall -r requirements.txt  # Replace with your dependencies file if needed
-    - name: rpint steps
-      run : echo "Step 1 Status:${{ job.steps['Checkout repository'].outcome }}"
+        
     - name: Run steps and capture statuses
       run: python capture_statuses.py  # Replace with your Python script file name
     
@@ -37,4 +31,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: step-statuses
-        path: statuses.txt  # Replace with the path to your captured statuses file
+        path: workflow_steps_status.csv  # Replace with the path to your captured statuses file
