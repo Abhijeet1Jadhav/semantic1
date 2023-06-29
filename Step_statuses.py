@@ -3,7 +3,7 @@ import requests
 import os
 
 # Replace with your personal access token
-ACCESS_TOKEN = '${{ secrets.RELEASE_GIT_TOKEN }}'
+ACCESS_TOKEN = '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'
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
