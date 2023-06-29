@@ -27,5 +27,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: workflow_steps
+          name: workflow_steps_artifact
           path: workflow_steps_status.csv
