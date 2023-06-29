@@ -1,6 +1,7 @@
-name: Workflow Steps Capture
+name: Capture Workflow Steps
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   capture_steps:
@@ -20,12 +21,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install PyGithub requests
 
-      - name: Capture Workflow Steps
-        run: |
-          python Step_statuses.py
+      - name: Run Python Script
+        env:
+          ACCESS_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
+        run: python Step_statuses.py
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: workflow_steps_artifact
+          name: workflow_steps
           path: workflow_steps_status.csv
