@@ -1,8 +1,6 @@
 name: Workflow Steps Capture
 
-on:
-  push:
-  pull_request:
+on: workflow_dispatch
 
 jobs:
   capture_steps:
