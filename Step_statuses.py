@@ -95,6 +95,7 @@ if response.status_code == 200:
         writer.writerow(['Dev Deployments', dev_deployments])
 
     print(f'Successfully captured the steps status in "{csv_file}".')
+    print(f'Dev deployment count: {dev_deployments}')
 
     # Upload the CSV file as an artifact
     upload_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
