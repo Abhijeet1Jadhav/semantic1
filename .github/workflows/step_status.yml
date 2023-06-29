@@ -22,7 +22,7 @@ jobs:
 
       - name: Capture Workflow Steps
         run: |
-          python Step_statuses.py
+          python statuses.py
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
