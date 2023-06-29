@@ -86,9 +86,13 @@ if response.status_code == 200:
     with open(csv_file, mode='w', newline='') as file:
         fieldnames = ['Run ID', 'Job Name', 'Step Name', 'Status', 'Creation_date', 'Finished_date', 'Pull Request Number', 'Pull Request Title']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
-
+        
         writer.writeheader()
         writer.writerows(steps_status)
+        
+    with open(csv_file, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Dev Deployments', dev_deployments])
 
     print(f'Successfully captured the steps status in "{csv_file}".')
 
