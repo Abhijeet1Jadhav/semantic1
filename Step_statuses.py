@@ -1,5 +1,6 @@
 import csv
 import requests
+import os
 
 # Replace with your personal access token
 ACCESS_TOKEN = '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'
@@ -60,16 +61,12 @@ if response.status_code == 200:
                 for step in job['steps']:
                     step_name = step['name']
                     status = step['conclusion'] if step['conclusion'] else 'in_progress'
-                    creation_date = step['started_at']
-                    finished_date = step['completed_at']
 
                     steps_status.append({
                         'Run ID': run_id,
                         'Job Name': job_name,
                         'Step Name': step_name,
                         'Status': status,
-                        'Creation_date': creation_date,
-                        'Finished_date': finished_date,
                         'Pull Request Number': pr_number,
                         'Pull Request Title': pr_title
                     })
@@ -83,14 +80,34 @@ if response.status_code == 200:
 
     # Write the steps status to a CSV file
     with open(csv_file, mode='w', newline='') as file:
-        fieldnames = ['Run ID', 'Job Name', 'Step Name', 'Status', 'Creation_date', 'Finished_date', 'Pull Request Number', 'Pull Request Title']
+        fieldnames = ['Run ID', 'Job Name', 'Step Name', 'Status', 'Pull Request Number', 'Pull Request Title']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
 
         writer.writeheader()
         writer.writerows(steps_status)
 
     print(f'Successfully captured the steps status in "{csv_file}".')
-    print(f'Deployments on Dev environment: {dev_deployments}')
+
+    # Upload the CSV file as an artifact
+    upload_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
+    artifact_name = 'workflow_steps_artifact'
+
+    response = requests.post(
+        upload_url,
+        headers=headers,
+        json={
+            'artifact_name': artifact_name,
+            'size': os.path.getsize(csv_file),
+            'file_paths': [csv_file]
+        }
+    )
+
+    if response.status_code == 201:
+        print(f'CSV file "{csv_file}" uploaded as artifact with name "{artifact_name}"')
+    else:
+        print(f'Failed to upload artifact. Status Code: {response.status_code}')
+        print(response.text)
+
 else:
     print(f'Failed to retrieve workflow runs. Status Code: {response.status_code}')
     print(response.text)
