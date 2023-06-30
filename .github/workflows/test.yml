@@ -36,5 +36,5 @@ jobs:
           #curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/218603' --header 'Authorization: Bearer acbd5ab9-23c4-431f-b9e4-1dc7e63edc2f'
           json_response=$(curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/trace-matrix-report' --header 'Authorization: Bearer acbd5ab9-23c4-431f-b9e4-1dc7e63edc2f')
           echo "Extracted IQE Text: ${{ jiraID }}"
-          testcases=$(echo "$json_response" | jq '.[].requirements[] | select(.name | contains("${{ steps.jira.outputs.jiraID }}")) | select(.testcases).testcases')
+          testcases=$(echo "$json_response" | jq '.[].requirements[] | select(.name | contains("${{ jiraID }}")) | select(.testcases).testcases')
           echo $testcases
