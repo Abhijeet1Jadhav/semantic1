@@ -18,7 +18,9 @@ jobs:
           pr_number=${{ github.event.pull_request.number }}
           pr_message=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq -r '.head.commit.message')
           echo "::set-output name=pr_message::$pr_message"
-
+          echo "PR Title: ${{ github.event.pull_request.title }}" 
+          echo "PR Number: ${{ github.event.pull_request.number }}" 
+          echo "PR URL: ${{ github.event.pull_request.html_url }}"
       - name: Print PR Head Message
         run: |
           echo "PR Head Message: ${{ steps.pr.outputs.pr_message }}"
