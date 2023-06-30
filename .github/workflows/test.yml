@@ -1,0 +1,19 @@
+name: Print PR Details to CSV
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  Dev_Deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Print PR Message
+        run: |
+          echo "PR Message: ${{ github.event.pull_request.body }}"
+        
+      
