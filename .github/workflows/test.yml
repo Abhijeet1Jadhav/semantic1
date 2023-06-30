@@ -1,43 +1,44 @@
 name: Print PR Details to CSV
-
 on:
   pull_request:
     types:
       - opened
       - closed
 
+ 
+
 jobs:
   Dev_Deployment:
     runs-on: ubuntu-latest
+
+ 
+
     steps:
       - name: Checkout code
-
         uses: actions/checkout@v2
 
-      - name: Fetch PR Title
-
+      - name: Print PR Message
         id: fetchTitle
-
         run: |
-
-          echo "PR Title: ${{ github.event.pull_request.title }}
+          pr_number=${{ github.event.pull_request.number }}
+          pr_message=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq -r '.head.commit.message')
+          echo "::set-output name=pr_message::$pr_message"
+          echo "PR Title: ${{ github.event.pull_request.title }}" 
+          echo "PR Number: ${{ github.event.pull_request.number }}" 
+          echo "PR URL: ${{ github.event.pull_request.html_url }}"
 
           jiraID=$(echo "${{ github.event.pull_request.title }}" | grep -oE 'IQE-[0-9]+')
-
-          echo "::set-output name=jiraID::$jiraID"       
-
+          echo "::set-output name=jiraID::$jiraID"
           echo "Extracted IQE Text: $jiraID"
 
-      - name: executing Qtest
-
+      - name: Print PR Head Message
         run: |
-
-          json_response=$(curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/trace-matrix-report' --header 'Authorization: Bearer ${{ secrets.QTEST_TOKEN }}')
-
+          echo "PR Head Message: ${{ steps.pr.outputs.pr_message }}"
+      - name: executing Qtest
+        run: |
+          #curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/218603' --header 'Authorization: Bearer acbd5ab9-23c4-431f-b9e4-1dc7e63edc2f'
+          json_response=$(curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/trace-matrix-report' --header 'Authorization: Bearer acbd5ab9-23c4-431f-b9e4-1dc7e63edc2f')
           jiraID=${{ steps.fetchTitle.outputs.jiraID }}
-
           echo "Extracted IQE Text: $jiraID"
-
           testcases=$(echo "$json_response" | jq '.[].requirements[] | select(.name | contains("$jiraID")) | select(.testcases).testcases')
-
           echo $testcases
