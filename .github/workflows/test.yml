@@ -28,5 +28,8 @@ jobs:
       - name: Print PR Head Message
         run: |
           echo "PR Head Message: ${{ steps.pr.outputs.pr_message }}"
+      - name: executing Qtest
+        run: |
+          curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/218603' --header 'Authorization: Bearer acbd5ab9-23c4-431f-b9e4-1dc7e63edc2f'
         
       
