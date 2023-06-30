@@ -24,9 +24,6 @@ jobs:
           
           jiraID=$(echo "${{ github.event.pull_request.title }}" | grep -oE 'IQE-[0-9]+')          
           echo "Extracted IQE Text: $jiraID"
-          
-          
-      - name: extracting JIRA ID
         
       - name: Print PR Head Message
         run: |
