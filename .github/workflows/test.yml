@@ -16,5 +16,6 @@ jobs:
       - name: Print PR Message
         run: |
           echo "PR Message: ${{ github.event.pull_request.body }}"
+          echo " PR Head: ${{ github.event.pull_request.head.commit.message }}"
         
       
