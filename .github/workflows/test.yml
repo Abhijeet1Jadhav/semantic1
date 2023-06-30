@@ -17,5 +17,14 @@ jobs:
         run: |
           echo "PR Message: ${{ github.event.pull_request.body }}"
           echo " PR Head: ${{ github.event.pull_request.head.commit.message }}"
+          pr_number=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" | jq '.[0].number')
+          pr_message=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq '.body')
+          echo "::set-output name=pr_message::$pr_message"
+
+ 
+
+      - name: Print PR Message
+        run: |
+          echo "PR Message: ${{ steps.pr.outputs.pr_message }}"
         
       
