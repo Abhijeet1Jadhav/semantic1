@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Print PR Message
-        id: jira
+        id: jiranumber
         run: |
           pr_number=${{ github.event.pull_request.number }}
           pr_message=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number" | jq -r '.head.commit.message')
@@ -23,16 +23,18 @@ jobs:
           echo "PR Number: ${{ github.event.pull_request.number }}" 
           echo "PR URL: ${{ github.event.pull_request.html_url }}"
           
-          jiraID=$(echo "${{ github.event.pull_request.title }}" | grep -oE 'IQE-[0-9]+')          
+          jiraID=$(echo "${{ github.event.pull_request.title }}" | grep -oE 'IQE-[0-9]+') >> >> $GITHUB_OUTPUT      
           echo "Extracted IQE Text: $jiraID"
         
       - name: Print PR Head Message
+        id: jira
         run: |
-          echo "PR Head Message: ${{ steps.pr.outputs.pr_message }}"
+          echo "jiraID ${{ steps.jiranumber.outputs.jiraID}}"
+          
       - name: executing Qtest
         run: |
           #curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/218603' --header 'Authorization: Bearer acbd5ab9-23c4-431f-b9e4-1dc7e63edc2f'
           json_response=$(curl --location --request GET 'https://touchlessreg.qtestnet.com/api/v3/projects/8101/requirements/trace-matrix-report' --header 'Authorization: Bearer acbd5ab9-23c4-431f-b9e4-1dc7e63edc2f')
           echo "Extracted IQE Text: ${{ jiraID }}"
-          testcases=$(echo "$json_response" | jq '.[].requirements[] | select(.name | contains("${{ jiraID }}")) | select(.testcases).testcases')
+          testcases=$(echo "$json_response" | jq '.[].requirements[] | select(.name | contains("${{ steps.jira.outputs.jiraID }}")) | select(.testcases).testcases')
           echo $testcases
