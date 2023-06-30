@@ -22,10 +22,9 @@ jobs:
           echo "PR Number: ${{ github.event.pull_request.number }}" 
           echo "PR URL: ${{ github.event.pull_request.html_url }}"
           
-      - name: PR message
-        run: |
-        PR_title: ${{ github.event.pull_request.title }}
-        JIRA_ID: echo ${{ PR_title }} | cut -d' ' -f1
+          jiraID=$(echo "${{ github.event.pull_request.title }}" | grep -oE 'IQE-[0-9]+')          
+          echo "Extracted IQE Text: $jiraID"
+          
           
       - name: extracting JIRA ID
         
