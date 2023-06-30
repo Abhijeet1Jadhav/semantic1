@@ -21,6 +21,14 @@ jobs:
           echo "PR Title: ${{ github.event.pull_request.title }}" 
           echo "PR Number: ${{ github.event.pull_request.number }}" 
           echo "PR URL: ${{ github.event.pull_request.html_url }}"
+          
+      - name: PR message
+        run: |
+        PR_title: ${{ github.event.pull_request.title }}
+        JIRA_ID: echo ${{ PR_title }} | cut -d' ' -f1
+          
+      - name: extracting JIRA ID
+        
       - name: Print PR Head Message
         run: |
           echo "PR Head Message: ${{ steps.pr.outputs.pr_message }}"
