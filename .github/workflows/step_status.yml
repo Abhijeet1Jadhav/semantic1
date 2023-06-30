@@ -24,10 +24,20 @@ jobs:
       - name: Run Python Script
         env:
           ACCESS_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
-        run: python Step_statuses.py
+       # run: python Step_statuses.py
+        run: |
+          python Step_statuses.py > output.csv
+          echo "step,status,pull_request_number,pull_request_title" > header.csv
+          cat header.csv output.csv > workflow_steps_status.csv
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: workflow_steps
           path: workflow_steps_status.csv
+
+      #- name: Upload Artifact
+       ## uses: actions/upload-artifact@v2
+      #  with:
+       #   name: workflow_steps
+        #  path: workflow_steps_status.csv
