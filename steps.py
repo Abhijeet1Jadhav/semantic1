@@ -2,6 +2,9 @@ import csv
 import requests
 import os
 
+
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
