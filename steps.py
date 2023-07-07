@@ -176,7 +176,7 @@ if response.status_code == 200:
         file.write(f'Deployments to Prod: {prod_deployments}\n')
         file.write(f'Deployments to Test: {test_deployments}\n')
 
- upload_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
+    upload_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
     artifact_name = 'workflow_steps_artifact'
 
     response = requests.post(
