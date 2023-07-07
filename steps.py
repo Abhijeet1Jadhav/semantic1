@@ -8,7 +8,7 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
-WORKFLOW_FILE = 'extraction.yml'
+WORKFLOW_FILE = 'steps.yml'
 
 # Set the headers including the access token
 headers = {
