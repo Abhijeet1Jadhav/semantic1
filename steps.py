@@ -176,15 +176,25 @@ if response.status_code == 200:
         writer.writerow(['Prod', prod_deployments])
         writer.writerow(['Test', test_deployments])
 
-    # Set the artifact path
-    artifact_path = 'workflow_steps_status.csv'
+    # Upload the CSV file as an artifact
+    upload_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
     artifact_name = 'workflow_steps_artifact'
-    os.makedirs(artifact_path, exist_ok=True)
 
-    # Move the CSV file to the artifacts directory
-    os.rename(csv_file, os.path.join(artifact_path, csv_file))
+    response = requests.post(
+        upload_url,
+        headers=headers,
+        json={
+            'artifact_name': artifact_name,
+            'size': os.path.getsize(csv_file),
+            'file_paths': [csv_file]
+        }
+    )
 
-    print(f'Successfully created the artifacts.')
+    if response.status_code == 201:
+        print(f'CSV file "{csv_file}" uploaded as artifact with name "{artifact_name}"')
+    else:
+        print(f'Failed to upload artifact. Status Code: {response.status_code}')
+        print(response.text)
 else:
     print(f'Failed to retrieve workflow runs. Status Code: {response.status_code}')
     print(response.text)
