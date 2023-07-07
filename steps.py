@@ -176,15 +176,21 @@ if response.status_code == 200:
         file.write(f'Deployments to Prod: {prod_deployments}\n')
         file.write(f'Deployments to Test: {test_deployments}\n')
 
-    # Set the artifact path
-    artifact_path = 'artifacts'
-    os.makedirs(artifact_path, exist_ok=True)
+ upload_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
+    artifact_name = 'workflow_steps_artifact'
 
-    # Move the CSV file and deployment count file to the artifacts directory
-    os.rename(csv_file, os.path.join(artifact_path, csv_file))
-    os.rename(deployment_count_file, os.path.join(artifact_path, deployment_count_file))
+    response = requests.post(
+        upload_url,
+        headers=headers,
+        json={
+            'artifact_name': artifact_name,
+            'size': os.path.getsize(csv_file),
+            'file_paths': [csv_file]
+        }
+    )
 
-    print(f'Successfully created the artifacts.')
-else:
-    print(f'Failed to retrieve workflow runs. Status Code: {response.status_code}')
-    print(response.text)
+    if response.status_code == 201:
+        print(f'CSV file "{csv_file}" uploaded as artifact with name "{artifact_name}"')
+    else:
+        print(f'Failed to upload artifact. Status Code: {response.status_code}')
+        print(response.text)
