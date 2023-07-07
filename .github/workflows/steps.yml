@@ -22,7 +22,7 @@ jobs:
 
       - name: Capture Workflow Steps
         env:
-          ACCESS_TOKEN: ${{ secrets.PAT }}
+          ACCESS_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
         run: |
           python steps.py
 
