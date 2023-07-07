@@ -177,7 +177,7 @@ if response.status_code == 200:
         writer.writerow(['Test', test_deployments])
 
     # Set the artifact path
-    artifact_path = 'artifacts'
+    artifact_path = 'workflow_steps_status.csv'
     artifact_name = 'workflow_steps_artifact'
     os.makedirs(artifact_path, exist_ok=True)
 
