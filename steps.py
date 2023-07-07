@@ -178,6 +178,7 @@ if response.status_code == 200:
 
     # Set the artifact path
     artifact_path = 'artifacts'
+    artifact_name = 'workflow_steps_artifact'
     os.makedirs(artifact_path, exist_ok=True)
 
     # Move the CSV file to the artifacts directory
