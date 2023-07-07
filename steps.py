@@ -28,7 +28,7 @@ def fetch_run_and_job_steps(run_id):
     run_response = requests.get(run_url, headers=headers)
     if run_response.status_code == 200:
         run_details = run_response.json()
-        run_name = run_details['workflow']['name']
+        run_name = run_details['name']
         run_number = run_details['run_number']
         run_attempt = run_details['run_attempt']
         head_commit_message = run_details['head_commit']['message']
