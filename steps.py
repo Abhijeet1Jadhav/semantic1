@@ -3,7 +3,7 @@ import requests
 import os
 
 # Replace with your personal access token
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = 'os.environ['ACCESS_TOKEN']'
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
