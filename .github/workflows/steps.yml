@@ -1,4 +1,4 @@
-name: Workflow Steps Capture
+name: step status
 
 on: workflow_dispatch
 
