@@ -113,7 +113,7 @@ if response.status_code == 200:
             # Count the number of deployments to each environment
             for job_step in run_and_job_steps['Job Steps']:
                 job_name = job_step['Job Name']
-                if job_name == 'Deployment to Dev':
+                if job_name == 'Deployment to Dev' and conclusion == 'success':
                     dev_deployments += 1
                 elif job_name == 'Deployment to Prod':
                     prod_deployments += 1
