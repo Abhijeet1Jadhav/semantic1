@@ -30,7 +30,7 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
         run: |
-          python steps.py
+          python steps.py ${{ github.repository }} ${{ github.sha }} ${{ github.token }} ${{ github.event.inputs.workflow_file }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
