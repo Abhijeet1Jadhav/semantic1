@@ -9,7 +9,7 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
 #WORKFLOW_FILE = 'steps.yml'
-WORKFLOW_FILE = input('Enter the workflow file name: ')
+WORKFLOW_FILE = sys.argv[1]
 
 # Set the headers including the access token
 headers = {
