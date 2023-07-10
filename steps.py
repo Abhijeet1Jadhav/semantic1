@@ -44,6 +44,7 @@ def fetch_run_and_job_steps(run_id):
 
         for job in jobs:
             job_name = job['name']
+            job_conslusion = job['conclusion']
 
             # Get the pull request details if the workflow is triggered by a pull request
             if 'pull_request' in job:
