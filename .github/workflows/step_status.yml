@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  capture_steps:
+  Deployment-to-Dev:
     runs-on: ubuntu-latest
 
     steps:
