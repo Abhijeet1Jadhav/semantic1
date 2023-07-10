@@ -1,6 +1,12 @@
 name: step status
 ##
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_file:
+        description: 'Workflow file name'
+        required: true
+        default: 'steps.yml'
 
 jobs:
   capture_steps:
