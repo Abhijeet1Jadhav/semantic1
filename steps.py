@@ -113,13 +113,14 @@ if response.status_code == 200:
             # Count the number of deployments to each environment
             for job_step in run_and_job_steps['Job Steps']:
                 job_name = job_step['Job Name']
-                if job_name == 'Deployment-to-Dev' and conclusion == 'success':
-                    dev_deployments += 1
-                elif job_name == 'Deployment to Prod':
-                    prod_deployments += 1
-                elif job_name == 'Deployment to Test':
-                    test_deployments += 1
-
+                if job_conclusion == 'success':
+                    if job_name == 'Deployment-to-Dev':
+                        dev_deployments += 1
+                    elif job_name == 'Deployment to Prod':
+                        prod_deployments += 1
+                    elif job_name == 'Deployment to Test':
+                        test_deployments += 1
+    
     # Write the runs data to a CSV file
     csv_file = 'workflow_runs_data.csv'
     with open(csv_file, mode='w', newline='') as file:
