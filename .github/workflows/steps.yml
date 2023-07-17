@@ -37,3 +37,10 @@ jobs:
         with:
           name: workflow_steps_artifact
           path: workflow_runs_data.csv
+          
+      - name: Upload pivot Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: pivot_table_artifact
+          path: pivot_table.csv
+          path: workflow_runs_data.csv
