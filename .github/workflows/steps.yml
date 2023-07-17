@@ -43,4 +43,3 @@ jobs:
         with:
           name: pivot_table_artifact
           path: pivot_table.csv
-          path: workflow_runs_data.csv
