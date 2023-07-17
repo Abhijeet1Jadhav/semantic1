@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 # Replace with your personal access token
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
