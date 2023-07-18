@@ -1,0 +1,49 @@
+name: Generate Pivot Table
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_start_time:
+        description: 'Job Start Time'
+        required: true
+      job_end_time:
+        description: 'Job End Time'
+        required: true
+      workflow_file:
+        description: 'Workflow File'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Run script
+        run: python script.py
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          REPO_OWNER: YourRepoOwner
+          REPO_NAME: YourRepoName
+          WORKFLOW_FILE: ${{ github.event.inputs.workflow_file }}
+          JOB_START_TIME: ${{ github.event.inputs.job_start_time }}
+          JOB_END_TIME: ${{ github.event.inputs.job_end_time }}
+
+      - name: Archive CSV Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: csv-artifacts
+          path: |
+            workflow_steps_data.csv
+            pivot_table.csv
+            ${{ github.event.inputs.workflow_file }}
