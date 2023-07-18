@@ -30,7 +30,7 @@ jobs:
         run: pip install pandas requests
 
       - name: Run script
-        run: python script.py
+        run: python final.py
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           REPO_OWNER: YourRepoOwner
