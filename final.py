@@ -1,10 +1,13 @@
 import csv
-import requests
 import os
 import pandas as pd
 
+# Get the job start time and end time as input parameters
+job_start_time = os.getenv('JOB_START_TIME')
+job_end_time = os.getenv('JOB_END_TIME')
+
 # Replace with your personal access token
-ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
@@ -108,7 +111,7 @@ if response.status_code == 200:
             all_data.extend(job_steps)
 
     # Write all data to a CSV file
-    csv_file = 'workflow_runs_data.csv'
+    csv_file = 'workflow_steps_data.csv'
     with open(csv_file, mode='w', newline='') as file:
         fieldnames = ['Run Name', 'Job Name', 'Step Name', 'Job Start Time', 'Job End Time', 'Job Status', 'Job Conclusion', 'Pull Request Number', 'Pull Request Title', 'Status', 'Conclusion', 'Step Number', 'Started At', 'Completed At']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
@@ -120,52 +123,20 @@ if response.status_code == 200:
     # Create a DataFrame from the data
     df = pd.DataFrame(all_data, columns=fieldnames)
 
-    # Create a pivot table with the desired settings
-    pivot_table = df.pivot_table(index=['Run Name', 'Job Name', 'Step Name'], columns='Job Conclusion', aggfunc=len, fill_value=0, margins=True, margins_name='Total')
+    # Convert the 'Job Start Time' and 'Job End Time' columns to datetime
+    df['Job Start Time'] = pd.to_datetime(df['Job Start Time'])
+    df['Job End Time'] = pd.to_datetime(df['Job End Time'])
+
+    # Filter the DataFrame based on the provided job start time and end time
+    filtered_df = df[(df['Job Start Time'] >= job_start_time) & (df['Job End Time'] <= job_end_time)]
+
+    # Create the pivot table
+    pivot_table = pd.pivot_table(filtered_df, index=['Run Name', 'Job Name', 'Step Name'], columns='Job Conclusion', aggfunc='size', fill_value=0, margins=True, margins_name='Total')
 
     # Save the pivot table to a new CSV file
     pivot_csv_file = 'pivot_table.csv'
     pivot_table.to_csv(pivot_csv_file)
     print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".')
-
-    # Upload the workflow data CSV file as an artifact
-    upload_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
-    workflow_artifact_name = 'workflow_steps_artifact'
-
-    workflow_response = requests.post(
-        upload_url,
-        headers=headers,
-        json={
-            'artifact_name': workflow_steps_artifact,
-            'size': os.path.getsize(csv_file),
-            'file_paths': [csv_file]
-        }
-    )
-
-    if workflow_response.status_code == 201:
-        print(f'Workflow data CSV file "{csv_file}" uploaded as artifact with name "{workflow_artifact_name}"')
-    else:
-        print(f'Failed to upload workflow data CSV artifact. Status Code: {workflow_response.status_code}')
-        print(workflow_response.text)
-
-    # Upload the pivot table CSV file as an artifact
-    pivot_artifact_name = 'pivot_table_artifact'
-
-    pivot_response = requests.post(
-        upload_url,
-        headers=headers,
-        json={
-            'artifact_name': pivot_artifact_name,
-            'size': os.path.getsize(pivot_csv_file),
-            'file_paths': [pivot_csv_file]
-        }
-    )
-
-    if pivot_response.status_code == 201:
-        print(f'Pivot table CSV file "{pivot_csv_file}" uploaded as artifact with name "{pivot_artifact_name}"')
-    else:
-        print(f'Failed to upload pivot table CSV artifact. Status Code: {pivot_response.status_code}')
-        print(pivot_response.text)
 
 else:
     print(f'Failed to retrieve workflow runs. Status Code: {response.status_code}')
