@@ -4,12 +4,13 @@ import os
 import pandas as pd
 
 # Replace with your personal access token
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
-WORKFLOW_FILE = 'steps.yml'
+#WORKFLOW_FILE = 'steps.yml'
+WORKFLOW_FILE = sys.argv[4]
 
 # Set the headers including the access token
 headers = {
