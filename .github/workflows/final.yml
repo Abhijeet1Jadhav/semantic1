@@ -3,14 +3,14 @@ name: Generate Pivot Table
 on:
   workflow_dispatch:
     inputs:
+      workflow_file:
+        description: 'Workflow File'
+        required: true
       job_start_time:
         description: 'Job Start Time'
         required: true
       job_end_time:
         description: 'Job End Time'
-        required: true
-      workflow_file:
-        description: 'Workflow File'
         required: true
 
 jobs:
