@@ -1,22 +1,15 @@
 import csv
+import requests
 import os
 import pandas as pd
-import sys
-import requests
-
-# Get the job start time and end time as input parameters
-WORKFLOW_FILE = sys.argv[1]
-job_start_time = os.getenv('JOB_START_TIME')
-job_end_time = os.getenv('JOB_END_TIME')
 
 # Replace with your personal access token
-ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+ACCESS_TOKEN = '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'
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
-#WORKFLOW_FILE = 'steps.yml'
-
+WORKFLOW_FILE = 'steps.yml'
 
 # Set the headers including the access token
 headers = {
@@ -127,21 +120,48 @@ if response.status_code == 200:
     # Create a DataFrame from the data
     df = pd.DataFrame(all_data, columns=fieldnames)
 
-    # Convert the 'Job Start Time' and 'Job End Time' columns to datetime
-    df['Job Start Time'] = pd.to_datetime(df['Job Start Time'])
-    df['Job End Time'] = pd.to_datetime(df['Job End Time'])
-
-    # Filter the DataFrame based on the provided job start time and end time
-    filtered_df = df[(df['Job Start Time'] >= job_start_time) & (df['Job End Time'] <= job_end_time)]
-
-    # Create the pivot table
-    pivot_table = pd.pivot_table(filtered_df, index=['Run Name', 'Job Name', 'Step Name'], columns='Job Conclusion', aggfunc='size', fill_value=0, margins=True, margins_name='Total')
+    # Create a pivot table with the desired settings
+    pivot_table = df.pivot_table(index=['Run Name', 'Job Name','Step Name'], columns=['Job Conclusion'], aggfunc='size', fill_value=0)
 
     # Save the pivot table to a new CSV file
     pivot_csv_file = 'pivot_table.csv'
     pivot_table.to_csv(pivot_csv_file)
     print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".')
 
+     # Upload the CSV files as artifacts
+    artifacts_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
+    artifact_headers = {
+        'Authorization': f'token {ACCESS_TOKEN}',
+        'Content-Type': 'application/zip'
+    }
+
+    # Upload the first CSV file
+    with open(csv_file, 'rb') as file:
+        artifact_payload = {
+            'name': 'Workflow Steps Data',
+            'kind': 'run',
+            'path': csv_file
+        }
+        response = requests.post(artifacts_url, headers=artifact_headers, json=artifact_payload, files={'file': file})
+        if response.status_code == 201:
+            print(f'Successfully uploaded "{csv_file}" as an artifact.')
+        else:
+            print(f'Failed to upload "{csv_file}" as an artifact. Status Code: {response.status_code}')
+            print(response.text)
+
+    # Upload the second CSV file
+    with open(pivot_csv_file, 'rb') as file:
+        artifact_payload = {
+            'name': 'Pivot Table Data',
+            'kind': 'run',
+            'path': pivot_csv_file
+        }
+        response = requests.post(artifacts_url, headers=artifact_headers, json=artifact_payload, files={'file': file})
+        if response.status_code == 201:
+            print(f'Successfully uploaded "{pivot_csv_file}" as an artifact.')
+        else:
+            print(f'Failed to upload "{pivot_csv_file}" as an artifact. Status Code: {response.status_code}')
+            print(response.text)
 else:
     print(f'Failed to retrieve workflow runs. Status Code: {response.status_code}')
     print(response.text)
