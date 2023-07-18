@@ -5,15 +5,9 @@ import sys
 import requests
 
 # Get the job start time and end time as input parameters
-#WORKFLOW_FILE = sys.argv[1]
-#job_start_time = os.getenv('JOB_START_TIME')
-#job_end_time = os.getenv('JOB_END_TIME')
-
-#repo_owner = sys.argv[1]
-#repo_name = sys.argv[2]
-workflow_file = sys.argv[1]
-job_start_time = sys.argv[2]
-job_end_time = sys.argv[3]
+WORKFLOW_FILE = sys.argv[1]
+job_start_time = os.getenv('JOB_START_TIME')
+job_end_time = os.getenv('JOB_END_TIME')
 
 # Replace with your personal access token
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
