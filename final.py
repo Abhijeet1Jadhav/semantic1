@@ -2,7 +2,7 @@ import csv
 import os
 import pandas as pd
 import sys
-import request
+import requests
 
 # Get the job start time and end time as input parameters
 job_start_time = os.getenv('JOB_START_TIME')
