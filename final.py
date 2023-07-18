@@ -10,7 +10,7 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
-#WORKFLOW_FILE = 'steps.yml'
+# WORKFLOW_FILE = 'steps.yml'
 WORKFLOW_FILE = sys.argv[4]
 
 # Set the headers including the access token
@@ -69,15 +69,21 @@ def fetch_run_and_job_steps(run_id):
                 completed_at = step['completed_at']
 
                 job_steps.append({
+                    'Run ID': run_id,
                     'Run Name': run_name,
+                    'Repository Name': f'{REPO_OWNER}/{REPO_NAME}',
+                    'Run Number': run_number,
+                    'Run Attempt': run_attempt,
+                    'Head Commit Message': head_commit_message,
+                    'Author': author,
                     'Job Name': job_name,
-                    'Step Name': step_name,
                     'Job Start Time': job_start_time,
                     'Job End Time': job_end_time,
                     'Job Status': job_status,
                     'Job Conclusion': job_conclusion,
                     'Pull Request Number': pr_number,
                     'Pull Request Title': pr_title,
+                    'Step Name': step_name,
                     'Status': status,
                     'Conclusion': conclusion,
                     'Step Number': step_number,
@@ -112,7 +118,7 @@ if response.status_code == 200:
     # Write all data to a CSV file
     csv_file = 'workflow_steps_data.csv'
     with open(csv_file, mode='w', newline='') as file:
-        fieldnames = ['Run ID', 'Run Name', 'Repository Name', 'Run Number', 'Run Attempt', 'Head Commit Message', 'Author', 'Job Name', 'Job Start Time', 'Job End Time', 'Job status', 'Job conclusion', 'Pull Request Number', 'Pull Request Title', 'Step Name', 'Status', 'Conclusion', 'Step Number', 'Started At', 'Completed At']
+        fieldnames = ['Run ID', 'Run Name', 'Repository Name', 'Run Number', 'Run Attempt', 'Head Commit Message', 'Author', 'Job Name', 'Job Start Time', 'Job End Time', 'Job Status', 'Job Conclusion', 'Pull Request Number', 'Pull Request Title', 'Step Name', 'Status', 'Conclusion', 'Step Number', 'Started At', 'Completed At']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(all_data)
@@ -123,14 +129,14 @@ if response.status_code == 200:
     df = pd.DataFrame(all_data, columns=fieldnames)
 
     # Create a pivot table with the desired settings
-    pivot_table = df.pivot_table(index=['Run Name', 'Job Name','Step Name'], columns=['Job Conclusion'], aggfunc='size', fill_value=0)
+    pivot_table = df.pivot_table(index=['Run Name', 'Job Name', 'Step Name'], columns=['Job Conclusion'], aggfunc='size', fill_value=0)
 
     # Save the pivot table to a new CSV file
     pivot_csv_file = 'pivot_table.csv'
     pivot_table.to_csv(pivot_csv_file)
     print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".')
 
-     # Upload the CSV files as artifacts
+    # Upload the CSV files as artifacts
     artifacts_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/artifacts'
     artifact_headers = {
         'Authorization': f'token {ACCESS_TOKEN}',
