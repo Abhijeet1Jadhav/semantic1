@@ -112,7 +112,7 @@ if response.status_code == 200:
     # Write all data to a CSV file
     csv_file = 'workflow_steps_data.csv'
     with open(csv_file, mode='w', newline='') as file:
-        fieldnames = ['Run Name', 'Job Name', 'Step Name', 'Job Start Time', 'Job End Time', 'Job Status', 'Job Conclusion', 'Pull Request Number', 'Pull Request Title', 'Status', 'Conclusion', 'Step Number', 'Started At', 'Completed At']
+        fieldnames = ['Run ID', 'Run Name', 'Repository Name', 'Run Number', 'Run Attempt', 'Head Commit Message', 'Author', 'Job Name', 'Job Start Time', 'Job End Time', 'Job status', 'Job conclusion', 'Pull Request Number', 'Pull Request Title', 'Step Name', 'Status', 'Conclusion', 'Step Number', 'Started At', 'Completed At']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(all_data)
