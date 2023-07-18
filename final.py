@@ -11,9 +11,9 @@ import requests
 
 #repo_owner = sys.argv[1]
 #repo_name = sys.argv[2]
-workflow_file = sys.argv[3]
-job_start_time = sys.argv[4]
-job_end_time = sys.argv[5]
+workflow_file = sys.argv[1]
+job_start_time = sys.argv[2]
+job_end_time = sys.argv[3]
 
 # Replace with your personal access token
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
