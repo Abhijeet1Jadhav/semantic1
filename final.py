@@ -12,7 +12,8 @@ ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
-WORKFLOW_FILE = 'steps.yml'
+#WORKFLOW_FILE = 'steps.yml'
+WORKFLOW_FILE = sys.argv[4]
 
 # Set the headers including the access token
 headers = {
