@@ -34,8 +34,8 @@ jobs:
         run: python final.py
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          REPO_OWNER: YourRepoOwner
-          REPO_NAME: YourRepoName
+          REPO_OWNER: Abhijeet1Jadhav
+          REPO_NAME: semantic1
           WORKFLOW_FILE: ${{ github.event.inputs.workflow_file }}
           JOB_START_TIME: ${{ github.event.inputs.job_start_time }}
           JOB_END_TIME: ${{ github.event.inputs.job_end_time }}
