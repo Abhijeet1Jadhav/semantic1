@@ -5,6 +5,7 @@ import sys
 import requests
 
 # Get the job start time and end time as input parameters
+WORKFLOW_FILE = sys.argv[1]
 job_start_time = os.getenv('JOB_START_TIME')
 job_end_time = os.getenv('JOB_END_TIME')
 
@@ -15,7 +16,7 @@ ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 REPO_OWNER = 'Abhijeet1Jadhav'
 REPO_NAME = 'semantic1'
 #WORKFLOW_FILE = 'steps.yml'
-WORKFLOW_FILE = sys.argv[1]
+
 
 # Set the headers including the access token
 headers = {
