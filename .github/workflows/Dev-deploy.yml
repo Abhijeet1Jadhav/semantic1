@@ -7,7 +7,7 @@ on:
     types:
       - closed
 jobs:
-  Dev_Deployment:
+  Deploy-to-Dev:
     runs-on: ubuntu-latest
     environment: Development
     steps:
