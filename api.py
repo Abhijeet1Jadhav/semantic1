@@ -34,7 +34,7 @@ def upload_attachment_to_jira_issue(issue_key, attachment_file_path):
         jira.add_attachment(issue=issue_key, attachment=file)
 
 # Replace with your personal access token
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
