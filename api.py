@@ -166,6 +166,9 @@ for workflow_name in workflow_names_list:
     for env, count in deployment_counts.items():
         total_deployment_counts[env] += count
 
+if not os.path.exists(WORKFLOWS_FOLDER):
+    os.makedirs(WORKFLOWS_FOLDER)
+
 # Write each workflow data to separate CSV files
 for workflow_name, workflow_data in workflow_data_dict.items():
     csv_file = os.path.join(WORKFLOWS_FOLDER, f'{workflow_name}_workflow_steps_data.csv')
