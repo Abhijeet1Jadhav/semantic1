@@ -10,7 +10,7 @@ import time
 
 JIRA_BASE_URL = 'https://demo-sw.atlassian.net'  # Replace with your Jira instance URL
 JIRA_USERNAME = 'jadhavabhijeet6411@gmail.com'  # Replace with your Jira username
-JIRA_API_TOKEN = 'ATATT3xFfGF0q7Gadw2G3jCIV0c7jKVDo8Desj5Y3RbGdPcntN1DRoPaC-mTR46nhZ6qhHwgiNpZvCcg55ObvGolnI5veU6jXp52JwUBPkWM7aeWKCnORVpNLMJQJufR3q1BSy1nAARE-nuHoSfN0OABwbYDgJ2KKiFp_2nNnGzACTAnSfsXC58=FB7B7160'  # Replace with your Jira API token
+JIRA_API_TOKEN = os.environ['JIRA_API_TOKEN']  # Replace with your Jira API token
 JIRA_PROJECT_KEY = 'DS'  # Replace with the ID of the Jira dashboard where you want to upload
 PARENT_ISSUE_KEY = 'DS-2'  # Replace with the ID of the Jira dashboard where you want to upload
 
