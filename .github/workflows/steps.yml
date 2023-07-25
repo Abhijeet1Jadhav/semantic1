@@ -24,22 +24,22 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install PyGithub requests pandas
+          pip install PyGithub requests pandas sys jira time
 
       - name: Capture Workflow Steps
         env:
           ACCESS_TOKEN: ${{ secrets.RELEASE_GIT_TOKEN }}
         run: |
-          python final.py ${{ github.repository }} ${{ github.sha }} ${{ github.token }} ${{ github.event.inputs.workflow_file }}
+          python api.py ${{ github.repository }} ${{ github.sha }} ${{ github.token }} ${{ github.event.inputs.workflow_file }}
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: workflow_steps_artifact
-          path: workflow_runs_data.csv
+     #- name: Upload Artifact
+        #uses: actions/upload-artifact@v2
+       # with:
+        #  name: workflow_steps_artifact
+         # path: workflow_runs_data.csv
           
-      - name: Upload pivot Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: pivot_table_artifact
-          path: pivot_table.csv
+      #- name: Upload pivot Artifact
+       # uses: actions/upload-artifact@v2
+        #with:
+         # name: pivot_table_artifact
+          #path: pivot_table.csv
