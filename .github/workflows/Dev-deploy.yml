@@ -17,4 +17,9 @@ jobs:
           MY_WORK_DIR=${{ github.workspace }}
           echo "MY_WORK_DIR=$MY_WORK_DIR" >> $GITHUB_ENV
           echo $MY_WORK_DIR
+  Deploy-to-QA:
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy2
+        run: echo "hello qa"
           
