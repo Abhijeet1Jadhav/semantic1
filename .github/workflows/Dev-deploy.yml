@@ -12,4 +12,6 @@ jobs:
     environment: Development
     steps:
       - name: deploy
-        run: echo "hello dev"
+        run: |
+          echo "hello dev"
+          echo $ {{ github.workspace }}
