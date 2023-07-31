@@ -14,5 +14,7 @@ jobs:
       - name: deploy
         run: |
           echo ${{ github.workspace }}
-          echo $GITHUB_WORKSPACE
+          MY_WORK_DIR=${{ github.workspace }}
+          echo "MY_WORK_DIR=$MY_WORK_DIR" >> $GITHUB_ENV
+          echo $MY_WORK_DIR
           
