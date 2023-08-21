@@ -210,7 +210,7 @@ pivot_table = df[df['Job Conclusion'] == 'success']  # Filter for successful job
 pivot_table = pivot_table[
     pivot_table['Job Start Time'] == pivot_table.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name'])['Job Start Time'].transform('max')
 ]  # Filter for the latest start time for each job
-pivot_table = pivot_table.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
+pivot_table = pivot_table.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Job Conclusion']).size().unstack(fill_value=0)
 pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
 
 # Add deployment counts for each repository and environment
