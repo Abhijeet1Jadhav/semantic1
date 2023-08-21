@@ -217,7 +217,7 @@ df['Date'] = df['Job Start Time'].dt.date
 # Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
 #pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
 pivot_table = df.groupby(['Job Start Time', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
-pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
+pivot_table['Total'] = pivot_table.sum(axis=1)
 
 # Add deployment counts for each repository and environment
 #for repo_name, deployment_counts in repo_deployment_counts.items():
