@@ -192,19 +192,14 @@ df.to_csv(combined_csv_file, index=False)
 
 print(f'Successfully captured all workflow steps data from all repositories in "{combined_csv_file}".')
 
-unique_jobs = {}
-
-# Iterate through the DataFrame to populate the unique_jobs dictionary
-for index, row in df.iterrows():
-    job_key = (row['Job Name'], row['Job Start Time'])
-    if job_key not in unique_jobs:
-        unique_jobs[job_key] = (row['Job Status'], row['Job Conclusion'])
+# Group the data by 'Job Name' and 'Job Start Time' to get unique jobs
+grouped_jobs = df.groupby(['Job Name', 'Job Start Time']).first()
 
 # Create a new DataFrame to store unique jobs with their statuses and conclusions
-unique_jobs_df = pd.DataFrame(unique_jobs.values(), index=unique_jobs.keys(), columns=['Job Status', 'Job Conclusion'])
+unique_jobs_df = grouped_jobs[['Job Status', 'Job Conclusion']]
 
 # Merge the original DataFrame with the unique_jobs_df based on 'Job Name' and 'Job Start Time'
-df = df.merge(unique_jobs_df, how='left', left_on=['Job Name', 'Job Start Time'], right_index=True)
+df = df.merge(unique_jobs_df, on=['Job Name', 'Job Start Time'], how='left')
 
 # Group by 'Job Start Time', 'Repository Name', 'Run Name', 'Job Name', and 'Job Status',
 # and get count of job statuses for each combination
@@ -217,6 +212,7 @@ pivot_table['Total'] = pivot_table.sum(axis=1)
 pivot_csv_file = 'pivot_table.csv'
 pivot_table.to_csv(pivot_csv_file)
 
+print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".')
 with open(pivot_csv_file, 'a', newline='') as file:
     writer = csv.writer(file)
     writer.writerow([])
