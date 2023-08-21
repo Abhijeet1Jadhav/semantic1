@@ -193,8 +193,9 @@ df.to_csv(combined_csv_file, index=False)
 print(f'Successfully captured all workflow steps data from all repositories in "{combined_csv_file}".')
 
 # Add Job Status and Job Conclusion columns to the DataFrame
-df['Job Status'] = df['Job Start Time'].map(lambda x: unique_timestamps.get(x, ('', ''))[0])
-df['Job Conclusion'] = df['Job Start Time'].map(lambda x: unique_timestamps.get(x, ('', ''))[1])
+df['Unique Job'] = df['Job Name'] + df['Job Start Time']  # Create a unique identifier for each job
+df['Job Status'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[0])
+df['Job Conclusion'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[1])
 
 df['Job Start Time'] = pd.to_datetime(df['Job Start Time'])
 df['Job End Time'] = pd.to_datetime(df['Job End Time'])
