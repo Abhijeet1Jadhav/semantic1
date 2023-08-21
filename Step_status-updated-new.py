@@ -57,7 +57,7 @@ REPO_DETAILS_LIST = [
 # Function to fetch run and job steps from GitHub
 def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs):
     run_and_job_steps = []
-    unique_timestamps = {}  # Dictionary to store unique timestamps and their corresponding job status and conclusion
+    unique_timestamps = {} 
 
     for workflow_run in workflow_runs:
         run_id = workflow_run.id
