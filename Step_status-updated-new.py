@@ -73,6 +73,8 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                 # Extract job and step details here
                 job_name = job['name']
                 job_start_time = job['started_at']
+                job_end_time = job['completed_at']
+                job_status = job['status']
                 job_conclusion = job['conclusion']
                 unique_timestamps[job_start_time] = (job_status, job_conclusion)  # Store unique timestamps and job status/conclusion
 
@@ -97,8 +99,12 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                         'Step Name': step_name,
                         'Job Start Time': job_start_time,
                         'Job End Time': job_end_time,
-                        'Step Status': status,
-                        'Step Conclusion': conclusion,
+                        'Job Status': job_status,
+                        'Job Conclusion': job_conclusion,
+                        'Pull Request Number': pr_number,
+                        'Pull Request Title': pr_title,
+                        'Status': status,
+                        'Conclusion': conclusion,
                         'Step Number': step_number,
                         'Started At': started_at,
                         'Completed At': completed_at
