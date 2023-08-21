@@ -57,7 +57,7 @@ REPO_DETAILS_LIST = [
 # Function to fetch run and job steps from GitHub
 def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs):
     run_and_job_steps = []
-    unique_timestamps = {} 
+    unique_jobs = set()  # Set to store unique job start times
 
     for workflow_run in workflow_runs:
         run_id = workflow_run.id
@@ -77,6 +77,13 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                 job_status = job['status']
                 job_conclusion = job['conclusion']
                 unique_timestamps[job_start_time] = (job_status, job_conclusion)  # Store unique timestamps and job status/conclusion
+
+               # Only consider unique job start times
+                if job_start_time not in unique_jobs:
+                    unique_jobs.add(job_start_time)
+                    
+                    job_status = job['status']
+                    job_conclusion = job['conclusion']
 
                # Get the pull request details if the workflow is triggered by a pull request
                 if 'pull_request' in job:
@@ -200,7 +207,8 @@ df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 df['Date'] = df['Job Start Time'].dt.date
 
 # Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
-pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
+#pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
+pivot_table = df.groupby(['Job Start Time', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
 pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
 
 # Add deployment counts for each repository and environment
