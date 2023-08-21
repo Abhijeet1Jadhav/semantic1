@@ -76,12 +76,7 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                 job_status = job['status']
                 job_conclusion = job['conclusion']
 
-                # Add unique combination of Job Name and Job Start Time
-                unique_job_key = (job_name, job_start_time)
-                if unique_job_key not in run_and_job_steps:
-                    run_and_job_steps.append(unique_job_key)
-
-               # Get the pull request details if the workflow is triggered by a pull request
+                # Get the pull request details if the workflow is triggered by a pull request
                 if 'pull_request' in job:
                     pull_request = job['pull_request']
                     pr_number = pull_request['number']
@@ -99,7 +94,8 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                     started_at = step['started_at']
                     completed_at = step['completed_at']
 
-                    run_and_job_steps.append({
+                    # Create a dictionary for the job and step details
+                    job_step_data = {
                         'Run ID': run_id,
                         'Run Name': workflow_name,
                         'Repository Name': f'{repo_owner}/{repo_name}',
@@ -120,13 +116,16 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                         'Step Number': step_number,
                         'Started At': started_at,
                         'Completed At': completed_at
-                    })
+                    }
+                    
+                    # Append the job and step data to the list
+                    run_and_job_steps.append(job_step_data)
 
         else:
             print(f'Failed to retrieve job details for workflow run ID: {run_id}')
 
     return run_and_job_steps
-
+   
 def get_deployment_count_per_environment(jobs):
     deployment_counts = {
         'Dev': 0,
