@@ -78,6 +78,15 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                 job_conclusion = job['conclusion']
                 unique_timestamps[job_start_time] = (job_status, job_conclusion)  # Store unique timestamps and job status/conclusion
 
+               # Get the pull request details if the workflow is triggered by a pull request
+                if 'pull_request' in job:
+                    pull_request = job['pull_request']
+                    pr_number = pull_request['number']
+                    pr_title = pull_request['title']
+                else:
+                    pr_number = None
+                    pr_title = None
+
                 # Iterate over each step in the job
                 for step in job['steps']:
                     step_name = step['name']
