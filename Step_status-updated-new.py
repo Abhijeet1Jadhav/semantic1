@@ -203,26 +203,15 @@ for index, row in df.iterrows():
 # Create a new DataFrame to store unique jobs with their statuses and conclusions
 unique_jobs_df = pd.DataFrame(unique_jobs.values(), index=unique_jobs.keys(), columns=['Job Status', 'Job Conclusion'])
 
-# Add Job Status and Job Conclusion columns to the DataFrame
-#df['Unique Job'] = df['Job Name'] + df['Job Start Time']  # Create a unique identifier for each job
-#df['Job Status'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[0])
-#df['Job Conclusion'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[1])
+# Merge the original DataFrame with the unique_jobs_df based on 'Job Name' and 'Job Start Time'
+df = df.merge(unique_jobs_df, how='left', left_on=['Job Name', 'Job Start Time'], right_index=True)
 
-df['Job Start Time'] = pd.to_datetime(df['Job Start Time'])
-df['Job End Time'] = pd.to_datetime(df['Job End Time'])
-
-# Extract the date from the 'Job Start Time' column and add it as a new column 'Date'
-df['Date'] = df['Job Start Time'].dt.date
-
-# Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
-#pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
+# Group by 'Job Start Time', 'Repository Name', 'Run Name', 'Job Name', and 'Job Status',
+# and get count of job statuses for each combination
 pivot_table = df.groupby(['Job Start Time', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
-pivot_table['Total'] = pivot_table.sum(axis=1)
 
-# Add deployment counts for each repository and environment
-#for repo_name, deployment_counts in repo_deployment_counts.items():
-    #for env, count in deployment_counts.items():
-        #pivot_table.loc[(slice(None), repo_name), f'{env} Deployment'] = count
+# Sum the job statuses to get the total count of unique jobs with each status
+pivot_table['Total'] = pivot_table.sum(axis=1)
 
 # Save the pivot table to a CSV file
 pivot_csv_file = 'pivot_table.csv'
