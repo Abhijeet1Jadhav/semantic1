@@ -192,10 +192,21 @@ df.to_csv(combined_csv_file, index=False)
 
 print(f'Successfully captured all workflow steps data from all repositories in "{combined_csv_file}".')
 
+unique_jobs = {}
+
+# Iterate through the DataFrame to populate the unique_jobs dictionary
+for index, row in df.iterrows():
+    job_key = (row['Job Name'], row['Job Start Time'])
+    if job_key not in unique_jobs:
+        unique_jobs[job_key] = (row['Job Status'], row['Job Conclusion'])
+
+# Create a new DataFrame to store unique jobs with their statuses and conclusions
+unique_jobs_df = pd.DataFrame(unique_jobs.values(), index=unique_jobs.keys(), columns=['Job Status', 'Job Conclusion'])
+
 # Add Job Status and Job Conclusion columns to the DataFrame
-df['Unique Job'] = df['Job Name'] + df['Job Start Time']  # Create a unique identifier for each job
-df['Job Status'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[0])
-df['Job Conclusion'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[1])
+#df['Unique Job'] = df['Job Name'] + df['Job Start Time']  # Create a unique identifier for each job
+#df['Job Status'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[0])
+#df['Job Conclusion'] = df['Unique Job'].map(lambda x: unique_jobs.get(x, ('', ''))[1])
 
 df['Job Start Time'] = pd.to_datetime(df['Job Start Time'])
 df['Job End Time'] = pd.to_datetime(df['Job End Time'])
