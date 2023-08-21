@@ -94,8 +94,7 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                     started_at = step['started_at']
                     completed_at = step['completed_at']
 
-                    # Create a dictionary for the job and step details
-                    job_step_data = {
+                    run_and_job_steps.append({
                         'Run ID': run_id,
                         'Run Name': workflow_name,
                         'Repository Name': f'{repo_owner}/{repo_name}',
@@ -116,16 +115,13 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                         'Step Number': step_number,
                         'Started At': started_at,
                         'Completed At': completed_at
-                    }
-                    
-                    # Append the job and step data to the list
-                    run_and_job_steps.append(job_step_data)
+                    })
 
         else:
             print(f'Failed to retrieve job details for workflow run ID: {run_id}')
 
     return run_and_job_steps
-   
+
 def get_deployment_count_per_environment(jobs):
     deployment_counts = {
         'Dev': 0,
@@ -149,8 +145,6 @@ repo_names = sys.argv[1:]
 
 # Create a list to store all data
 all_data = []
-
-unique_timestamps = {}
 
 # Create dictionaries to store deployment counts for each repository and environment
 total_deployment_counts = {
@@ -182,33 +176,33 @@ for repo_name in repo_names:
         # Append the workflow data to the all_data list
         all_data.extend(workflow_data)
 
+# Create a DataFrame from the collected data
 df = pd.DataFrame(all_data)
 
-# Create a dictionary to store unique job information
-unique_jobs = {}
+# Save the combined data to a single CSV file
+combined_csv_file = 'all_workflow_steps_data.csv'
+df.to_csv(combined_csv_file, index=False)
 
-# Iterate through the DataFrame to populate the unique_jobs dictionary
-for index, row in df.iterrows():
-    job_key = (row['Job Name'], row['Job Start Time'])
-    if job_key not in unique_jobs:
-        unique_jobs[job_key] = {'Job Status': row['Job Status'], 'Job Conclusion': row['Job Conclusion']}
+print(f'Successfully captured all workflow steps data from all repositories in "{combined_csv_file}".')
 
-# Update the 'Job Status' and 'Job Conclusion' columns in the DataFrame
-df['Job Status'] = df.apply(lambda row: unique_jobs[(row['Job Name'], row['Job Start Time'])]['Job Status'], axis=1)
-df['Job Conclusion'] = df.apply(lambda row: unique_jobs[(row['Job Name'], row['Job Start Time'])]['Job Conclusion'], axis=1)
+df['Job Start Time'] = pd.to_datetime(df['Job Start Time'])
+df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 
-# Group by 'Job Start Time', 'Repository Name', 'Run Name', 'Job Name', and 'Job Status',
-# and get count of job statuses for each combination
-pivot_table = df.groupby(['Job Start Time', 'Repository Name', 'Run Name', 'Job Name', 'Job Status']).size().unstack(fill_value=0)
+# Extract the date from the 'Job Start Time' column and add it as a new column 'Date'
+df['Date'] = df['Job Start Time'].dt.date
 
-# Sum the job statuses to get the total count of unique jobs with each status
-pivot_table['Total'] = pivot_table.sum(axis=1)
+# Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
+pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
+pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
+
+# Add deployment counts for each repository and environment
+for repo_name, deployment_counts in repo_deployment_counts.items():
+    for env, count in deployment_counts.items():
+        pivot_table.loc[(slice(None), repo_name), f'{env} Deployment'] = count
 
 # Save the pivot table to a CSV file
 pivot_csv_file = 'pivot_table.csv'
 pivot_table.to_csv(pivot_csv_file)
-
-print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".')
 
 with open(pivot_csv_file, 'a', newline='') as file:
     writer = csv.writer(file)
