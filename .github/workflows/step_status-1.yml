@@ -1,0 +1,42 @@
+name: Capture workflow steps
+
+on: workflow_dispatch
+   # inputs:
+    #  workflow_file:
+       # description: 'Workflow File'
+       # required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub requests pandas jira
+      - name: Run script
+        env:
+          ACCESS_TOKEN: ${{ secrets.REPORT_TOKEN }}
+          JIRA_ACCESS_TOKEN: ${{ secrets.JIRA_ACCESS_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.repository }}
+        run: python Step_status.py ${{ github.repository }} ${{ github.sha }} ${{ github.token }}
+        ##python final.py ${{ github.repository }} ${{ github.sha }} ${{ github.token }} ${{ github.event.inputs.workflow_file }} ${{ github.event.inputs.job_start_time }} ${{ github.event.inputs.job_end_time }}
+
+      - name: Archive CSV Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: csv-artifacts
+          path: |
+            all_workflow_steps_data.csv
+            pivot_table.csv
+            ${{ github.event.inputs.workflow_file }}
