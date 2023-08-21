@@ -10,34 +10,34 @@ import time
 import sys
 
 # Jira configuration
-JIRA_BASE_URL = 'https://demo-sw.atlassian.net'
-JIRA_USERNAME = 'jadhavabhijeet6411@gmail.com'
-JIRA_API_TOKEN = os.environ['JIRA_ACCESS_TOKEN']  # Replace with your Jira API token
-JIRA_PROJECT_KEY = 'TES'
-PARENT_ISSUE_KEY = 'TES-1'
+#JIRA_BASE_URL = 'https://demo-sw.atlassian.net'
+#JIRA_USERNAME = 'jadhavabhijeet6411@gmail.com'
+#JIRA_API_TOKEN = os.environ['JIRA_ACCESS_TOKEN']  # Replace with your Jira API token
+#JIRA_PROJECT_KEY = 'TES'
+#PARENT_ISSUE_KEY = 'TES-1'
 
 # Create Jira connection
-jira_credentials = (JIRA_USERNAME, JIRA_API_TOKEN)
-jira = JIRA(server=JIRA_BASE_URL, basic_auth=jira_credentials)
+#jira_credentials = (JIRA_USERNAME, JIRA_API_TOKEN)
+#jira = JIRA(server=JIRA_BASE_URL, basic_auth=jira_credentials)
 
 # Function to create a Jira sub-task
-def create_jira_subtask(parent_issue_key, summary, description, issue_type='Sub-task'):
-    ticket_number = int(time.time())
-    issue_dict = {
-        'project': {'key': JIRA_PROJECT_KEY},
-        'summary': f'{summary} ({ticket_number})',
-        'description': description,
-        'issuetype': {'name': issue_type},
-        'parent': {'key': parent_issue_key},
-        'components': [{'name': 'Release Management PoC'}]  # Add the component name here
-    }
-    new_issue = jira.create_issue(fields=issue_dict)
-    return new_issue.key
+#def create_jira_subtask(parent_issue_key, summary, description, issue_type='Sub-task'):
+   # ticket_number = int(time.time())
+    #issue_dict = {
+     #   'project': {'key': JIRA_PROJECT_KEY},
+      #  'summary': f'{summary} ({ticket_number})',
+       # 'description': description,
+        #'issuetype': {'name': issue_type},
+        #'parent': {'key': parent_issue_key},
+        #'components': [{'name': 'Release Management PoC'}]  # Add the component name here
+    #}
+    #new_issue = jira.create_issue(fields=issue_dict)
+    #return new_issue.key
 
 # Function to upload attachment to a Jira issue
-def upload_attachment_to_jira_issue(issue_key, attachment_file_path):
-    with open(attachment_file_path, 'rb') as file:
-        jira.add_attachment(issue=issue_key, attachment=file)
+#def upload_attachment_to_jira_issue(issue_key, attachment_file_path):
+ #   with open(attachment_file_path, 'rb') as file:
+  #      jira.add_attachment(issue=issue_key, attachment=file)
 
 # GitHub configuration
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']  # Replace with your personal access token
@@ -216,12 +216,12 @@ print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".
 #print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".')
 
 # Create Jira sub-task and upload reports as attachments
-summary = "Dynamic Sub-task: This is a test sub-task created via API"
-description = "This is the description of the dynamic sub-task"
-subtask_key = create_jira_subtask(PARENT_ISSUE_KEY, summary, description)
+#summary = "Dynamic Sub-task: This is a test sub-task created via API"
+#description = "This is the description of the dynamic sub-task"
+#subtask_key = create_jira_subtask(PARENT_ISSUE_KEY, summary, description)
 
 # Upload the report file as an attachment to the newly created issue
-report_file_path = "all_workflow_steps_data.csv"  # Replace with the path to your report file
-pivot_attachment_file_path = "pivot_table.csv"
-upload_attachment_to_jira_issue(subtask_key, report_file_path)
-upload_attachment_to_jira_issue(subtask_key, pivot_attachment_file_path)
+#report_file_path = "all_workflow_steps_data.csv"  # Replace with the path to your report file
+#pivot_attachment_file_path = "pivot_table.csv"
+#upload_attachment_to_jira_issue(subtask_key, report_file_path)
+#upload_attachment_to_jira_issue(subtask_key, pivot_attachment_file_path)
