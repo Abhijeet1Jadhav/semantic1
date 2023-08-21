@@ -1,4 +1,4 @@
-name: Capture workflow details
+name: New-updated
 
 on: workflow_dispatch
    # inputs:
@@ -29,4 +29,4 @@ jobs:
           JIRA_ACCESS_TOKEN: ${{ secrets.JIRA_ACCESS_TOKEN }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.repository }}
-        run: python Step_status-updated-new.py sherwin-williams-co/tag-cpm-action sherwin-williams-co/tag-cpm-qa-automation ${{ github.repository }}
+        run: python Step_status-updated-new.py Abhijeet1Jadhav/semantic1 Abhijeet1Jadhav/demorelease ${{ github.repository }}
