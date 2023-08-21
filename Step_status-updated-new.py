@@ -57,7 +57,6 @@ REPO_DETAILS_LIST = [
 # Function to fetch run and job steps from GitHub
 def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs):
     run_and_job_steps = []
-    unique_jobs = set()  # Set to store unique job start times
 
     for workflow_run in workflow_runs:
         run_id = workflow_run.id
@@ -76,14 +75,11 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                 job_end_time = job['completed_at']
                 job_status = job['status']
                 job_conclusion = job['conclusion']
-                unique_timestamps[job_start_time] = (job_status, job_conclusion)  # Store unique timestamps and job status/conclusion
 
-               # Only consider unique job start times
-                if job_start_time not in unique_jobs:
-                    unique_jobs.add(job_start_time)
-                    
-                    job_status = job['status']
-                    job_conclusion = job['conclusion']
+                # Add unique combination of Job Name and Job Start Time
+                unique_job_key = (job_name, job_start_time)
+                if unique_job_key not in run_and_job_steps:
+                    run_and_job_steps.append(unique_job_key)
 
                # Get the pull request details if the workflow is triggered by a pull request
                 if 'pull_request' in job:
