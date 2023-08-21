@@ -30,3 +30,13 @@ jobs:
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.repository }}
         run: python Step_status-updated-new.py Abhijeet1Jadhav/semantic1 Abhijeet1Jadhav/demorelease ${{ github.repository }}
+
+
+      - name: Archive CSV Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: csv-artifacts
+          path: |
+            all_workflow_steps_data.csv
+            pivot_table.csv
+            ${{ github.event.inputs.workflow_file }}
