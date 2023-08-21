@@ -148,6 +148,8 @@ repo_names = sys.argv[1:]
 # Create a list to store all data
 all_data = []
 
+unique_timestamps = {}
+
 # Create dictionaries to store deployment counts for each repository and environment
 total_deployment_counts = {
     'Dev': 0,
