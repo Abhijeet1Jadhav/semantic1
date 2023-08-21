@@ -57,7 +57,7 @@ REPO_DETAILS_LIST = [
 # Function to fetch run and job steps from GitHub
 def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs):
     run_and_job_steps = []
-    max_job_start_time = {}  # Dictionary to store the latest start times for each job
+    unique_timestamps = {}  # Dictionary to store unique timestamps and their corresponding job status and conclusion
 
     for workflow_run in workflow_runs:
         run_id = workflow_run.id
@@ -74,27 +74,7 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                 job_name = job['name']
                 job_start_time = job['started_at']
                 job_conclusion = job['conclusion']
-
-                if job_conclusion == 'success':
-                    if job_name not in max_job_start_time or job_start_time > max_job_start_time[job_name]:
-                        max_job_start_time[job_name] = job_start_time
-
-            for job in jobs:
-                # Extract job and step details here
-                job_name = job['name']
-                job_start_time = job['started_at']
-                job_end_time = job['completed_at']
-                job_status = job['status']
-                job_conclusion = job['conclusion']
-
-                # Get the pull request details if the workflow is triggered by a pull request
-                if 'pull_request' in job:
-                    pull_request = job['pull_request']
-                    pr_number = pull_request['number']
-                    pr_title = pull_request['title']
-                else:
-                    pr_number = None
-                    pr_title = None
+                unique_timestamps[job_start_time] = (job_status, job_conclusion)  # Store unique timestamps and job status/conclusion
 
                 # Iterate over each step in the job
                 for step in job['steps']:
@@ -117,12 +97,8 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
                         'Step Name': step_name,
                         'Job Start Time': job_start_time,
                         'Job End Time': job_end_time,
-                        'Job Status': job_status,
-                        'Job Conclusion': job_conclusion,
-                        'Pull Request Number': pr_number,
-                        'Pull Request Title': pr_title,
-                        'Status': status,
-                        'Conclusion': conclusion,
+                        'Step Status': status,
+                        'Step Conclusion': conclusion,
                         'Step Number': step_number,
                         'Started At': started_at,
                         'Completed At': completed_at
@@ -185,7 +161,7 @@ for repo_name in repo_names:
         workflow_data = fetch_run_and_job_steps(REPO_OWNER, REPO_NAME, workflow_name, workflow_runs)
 
         # Append the workflow data to the all_data list
-        all_data.extend(workflow_data)
+        all_data.extend(workflow_data))
 
 # Create a DataFrame from the collected data
 df = pd.DataFrame(all_data)
@@ -196,6 +172,10 @@ df.to_csv(combined_csv_file, index=False)
 
 print(f'Successfully captured all workflow steps data from all repositories in "{combined_csv_file}".')
 
+# Add Job Status and Job Conclusion columns to the DataFrame
+df['Job Status'] = df['Job Start Time'].map(lambda x: unique_timestamps.get(x, ('', ''))[0])
+df['Job Conclusion'] = df['Job Start Time'].map(lambda x: unique_timestamps.get(x, ('', ''))[1])
+
 df['Job Start Time'] = pd.to_datetime(df['Job Start Time'])
 df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 
@@ -203,14 +183,7 @@ df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 df['Date'] = df['Job Start Time'].dt.date
 
 # Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
-#pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
-#pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
-
-pivot_table = df[df['Job Conclusion'] == 'success']  # Filter for successful jobs
-pivot_table = pivot_table[
-    pivot_table['Job Start Time'] == pivot_table.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name'])['Job Start Time'].transform('max')
-]  # Filter for the latest start time for each job
-pivot_table = pivot_table.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Job Conclusion']).size().unstack(fill_value=0)
+pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Status', 'Job Conclusion']).size().unstack(fill_value=0)
 pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
 
 # Add deployment counts for each repository and environment
