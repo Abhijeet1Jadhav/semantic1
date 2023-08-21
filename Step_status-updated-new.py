@@ -161,7 +161,7 @@ for repo_name in repo_names:
         workflow_data = fetch_run_and_job_steps(REPO_OWNER, REPO_NAME, workflow_name, workflow_runs)
 
         # Append the workflow data to the all_data list
-        all_data.extend(workflow_data))
+        all_data.extend(workflow_data)
 
 # Create a DataFrame from the collected data
 df = pd.DataFrame(all_data)
