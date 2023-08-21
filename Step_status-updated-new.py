@@ -68,6 +68,16 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
         if response.status_code == 200:
             jobs = response.json()['jobs']
 
+               for job in jobs:
+                # Extract job and step details here
+                   job_name = job['name']
+                   job_start_time = job['started_at']
+                   job_conclusion = job['conclusion']
+
+                   if job_conclusion == 'success':
+                       if job_name not in max_job_start_time or job_start_time > max_job_start_time[job_name]:
+                           max_job_start_time[job_name] = job_start_time
+
             for job in jobs:
                 # Extract job and step details here
                 job_name = job['name']
@@ -192,13 +202,20 @@ df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 df['Date'] = df['Job Start Time'].dt.date
 
 # Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
-pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
+#pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
+#pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
+
+pivot_table = df[df['Job Conclusion'] == 'success']  # Filter for successful jobs
+pivot_table = pivot_table[
+    pivot_table['Job Start Time'] == pivot_table.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name'])['Job Start Time'].transform('max')
+]  # Filter for the latest start time for each job
+pivot_table = pivot_table.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
 pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
 
 # Add deployment counts for each repository and environment
-for repo_name, deployment_counts in repo_deployment_counts.items():
-    for env, count in deployment_counts.items():
-        pivot_table.loc[(slice(None), repo_name), f'{env} Deployment'] = count
+#for repo_name, deployment_counts in repo_deployment_counts.items():
+    #for env, count in deployment_counts.items():
+        #pivot_table.loc[(slice(None), repo_name), f'{env} Deployment'] = count
 
 # Save the pivot table to a CSV file
 pivot_csv_file = 'pivot_table.csv'
