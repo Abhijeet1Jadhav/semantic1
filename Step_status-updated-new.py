@@ -10,11 +10,11 @@ import time
 import sys
 
 # Jira configuration
-JIRA_BASE_URL = 'https://sherwin-williams.atlassian.net'
-JIRA_USERNAME = 'abhijeet.jadhav@sherwin.com'
+JIRA_BASE_URL = 'https://demo-sw.atlassian.net'
+JIRA_USERNAME = 'jadhavabhijeet6411@gmail.com'
 JIRA_API_TOKEN = os.environ['JIRA_ACCESS_TOKEN']  # Replace with your Jira API token
-JIRA_PROJECT_KEY = 'PMOD'
-PARENT_ISSUE_KEY = 'PMOD-3236'
+JIRA_PROJECT_KEY = 'TES'
+PARENT_ISSUE_KEY = 'TES-1'
 
 # Create Jira connection
 jira_credentials = (JIRA_USERNAME, JIRA_API_TOKEN)
@@ -49,8 +49,8 @@ headers = {
 
 # List of repository details
 REPO_DETAILS_LIST = [
-    {'owner': 'sherwin-williams-co', 'name': 'tag-cpm-action'},
-    {'owner': 'sherwin-williams-co', 'name': 'tag-cpm-qa-automation'}
+    {'owner': 'Abhijeet1Jadhav', 'name': 'semantic1'},
+    {'owner': 'Abhijeet1Jadhav', 'name': 'demorelease'}
     # Add more repository details as needed
 ]
 
