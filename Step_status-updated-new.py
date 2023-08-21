@@ -183,20 +183,13 @@ for repo_name in repo_names:
         # Append the workflow data to the all_data list
         all_data.extend(workflow_data)
 
-# Create a DataFrame from the collected data
 df = pd.DataFrame(all_data)
 
-# Save the combined data to a single CSV file
-combined_csv_file = 'all_workflow_steps_data.csv'
-df.to_csv(combined_csv_file, index=False)
-
-print(f'Successfully captured all workflow steps data from all repositories in "{combined_csv_file}".')
-
 # Group the data by 'Job Name' and 'Job Start Time' to get unique jobs
-grouped_jobs = df.groupby(['Job Name', 'Job Start Time']).first()
+grouped_jobs = df.groupby(['Job Name', 'Job Start Time']).first().reset_index()
 
 # Create a new DataFrame to store unique jobs with their statuses and conclusions
-unique_jobs_df = grouped_jobs[['Job Status', 'Job Conclusion']]
+unique_jobs_df = grouped_jobs[['Job Name', 'Job Start Time', 'Job Status', 'Job Conclusion']]
 
 # Merge the original DataFrame with the unique_jobs_df based on 'Job Name' and 'Job Start Time'
 df = df.merge(unique_jobs_df, on=['Job Name', 'Job Start Time'], how='left')
