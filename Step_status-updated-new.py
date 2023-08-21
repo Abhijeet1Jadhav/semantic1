@@ -57,6 +57,7 @@ REPO_DETAILS_LIST = [
 # Function to fetch run and job steps from GitHub
 def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs):
     run_and_job_steps = []
+    max_job_start_time = {}  # Dictionary to store the latest start times for each job
 
     for workflow_run in workflow_runs:
         run_id = workflow_run.id
@@ -68,15 +69,15 @@ def fetch_run_and_job_steps(repo_owner, repo_name, workflow_name, workflow_runs)
         if response.status_code == 200:
             jobs = response.json()['jobs']
 
-               for job in jobs:
+            for job in jobs:
                 # Extract job and step details here
-                   job_name = job['name']
-                   job_start_time = job['started_at']
-                   job_conclusion = job['conclusion']
+                job_name = job['name']
+                job_start_time = job['started_at']
+                job_conclusion = job['conclusion']
 
-                   if job_conclusion == 'success':
-                       if job_name not in max_job_start_time or job_start_time > max_job_start_time[job_name]:
-                           max_job_start_time[job_name] = job_start_time
+                if job_conclusion == 'success':
+                    if job_name not in max_job_start_time or job_start_time > max_job_start_time[job_name]:
+                        max_job_start_time[job_name] = job_start_time
 
             for job in jobs:
                 # Extract job and step details here
