@@ -207,7 +207,8 @@ df['Date'] = df['Job Start Time'].dt.date
 pivot_table = df.pivot_table(
     index=['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name'],
     columns='Job Conclusion',
-    values='Total Deployments',
+    columns='Job Conclusion',
+    values='Total Deployments',  # Assuming 'Total Deployments' is a column in your DataFrame
     aggfunc='sum',
     fill_value=0
 )
@@ -215,11 +216,11 @@ pivot_table = df.pivot_table(
 # Reset index to get rid of multi-index
 pivot_table = pivot_table.reset_index()
 
-# Add 'Total Deployments' column by summing up 'failure' and 'success'
+# Calculate 'Total Deployments' by summing 'failure' and 'success' columns
 pivot_table['Total Deployments'] = pivot_table['failure'] + pivot_table['success']
 
 # Reorder the columns as per your specified format
-column_order = ['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
+column_order = ['Date', 'Run Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
 pivot_table = pivot_table[column_order]
 
 # Create an in-memory Excel workbook
