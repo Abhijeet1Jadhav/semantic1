@@ -207,7 +207,6 @@ df['Date'] = df['Job Start Time'].dt.date
 pivot_table = df.pivot_table(
     index=['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name'],
     columns='Job Conclusion',
-    columns='Job Conclusion',
     values='Total Deployments',  # Assuming 'Total Deployments' is a column in your DataFrame
     aggfunc='sum',
     fill_value=0
