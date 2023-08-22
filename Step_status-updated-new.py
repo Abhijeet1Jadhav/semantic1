@@ -187,6 +187,14 @@ df.to_csv(combined_csv_file, index=False)
 
 print(f'Successfully captured all workflow steps data from all repositories in "{combined_csv_file}".')
 
+fieldnames = [
+    'Run ID', 'Run Name', 'Repository Name', 'Run Number', 'Run Attempt',
+    'Head Commit Message', 'Author', 'Job Name', 'Step Name', 'Job Start Time',
+    'Job End Time', 'Job Status', 'Job Conclusion', 'Pull Request Number',
+    'Pull Request Title', 'Status', 'Conclusion', 'Step Number',
+    'Started At', 'Completed At'
+]
+
 df = pd.DataFrame(all_data, columns=fieldnames)
 
 # Convert the 'Job Start Time' and 'Job End Time' columns to datetime
