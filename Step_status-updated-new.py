@@ -194,7 +194,7 @@ df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 df['Date'] = df['Job Start Time'].dt.date
 
 # Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
-pivot_table = df.groupby(['Date', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
+pivot_table = df.groupby(['Date', 'Run Name', 'Repository Name', 'Job Name', 'Job Conclusion']).size().unstack(fill_value=0)
 
 # Add 'Total' column to the pivot table to get the total count of runs for each combination
 pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
