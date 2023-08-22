@@ -193,6 +193,8 @@ df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 # Extract the date from the 'Job Start Time' column and add it as a new column 'Date'
 df['Date'] = df['Job Start Time'].dt.date
 
+pivot_table.index = pd.to_datetime(pivot_table.index)
+
 column_order = ['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
 pivot_table = pivot_table.reindex(columns=column_order)
 
