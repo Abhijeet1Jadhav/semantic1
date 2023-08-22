@@ -221,17 +221,11 @@ for row_idx, (index, row) in enumerate(pivot_table.iterrows(), start=1):
     for col_idx, value in enumerate(row, start=1):
         worksheet_pivot.write(row_idx, col_idx, value)
 
-# Add a new worksheet for deployment counts
+# Add a new worksheet for consolidated deployment counts
 worksheet_counts = workbook.add_worksheet('Consolidated Counts')
 worksheet_counts.write_row(0, 0, ['Repository Name', 'Environment', 'Deployment Count'])
 
 # Write consolidated deployment counts
-consolidated_counts = {
-    'Dev': total_deployment_counts['Dev'],
-    'QA': total_deployment_counts['QA'],
-    'Prod': total_deployment_counts['Prod']
-}
-
 row_idx = 1
 for repo_name, counts in repo_deployment_counts.items():
     for env, count in counts.items():
