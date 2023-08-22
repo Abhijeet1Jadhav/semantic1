@@ -8,6 +8,7 @@ from jira import JIRA
 import base64
 import time
 import sys
+from io import BytesIO
 
 # Jira configuration
 #JIRA_BASE_URL = 'https://demo-sw.atlassian.net'
