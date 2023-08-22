@@ -193,13 +193,11 @@ df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 # Extract the date from the 'Job Start Time' column and add it as a new column 'Date'
 df['Date'] = df['Job Start Time'].dt.date
 
-# Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
-pivot_table = df.groupby(['Date', 'Run Name', 'Repository Name', 'Job Name', 'Job Conclusion']).size().unstack(fill_value=0)
+column_order = ['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
+pivot_table = pivot_table.reindex(columns=column_order)
 
-# Add 'Total' column to the pivot table to get the total count of runs for each combination
-pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
-
-pivot_table.index = pd.to_datetime([x[0] for x in pivot_table.index])
+# Convert the index to datetime
+pivot_table.index = pd.to_datetime(pivot_table.index)
 
 # Create an in-memory Excel workbook
 excel_output = BytesIO()
@@ -210,7 +208,7 @@ worksheet_pivot = workbook.add_worksheet('Pivot Table')
 
 # Write the column headers
 header_format = workbook.add_format({'bold': True, 'align': 'center'})
-column_names = ['Date', 'Run Name', 'Repository Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
+column_names = ['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
 for col_idx, header in enumerate(column_names):
     worksheet_pivot.write(0, col_idx, header, header_format)
 
