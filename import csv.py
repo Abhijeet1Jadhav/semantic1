@@ -8,40 +8,12 @@ from jira import JIRA
 import base64
 import time
 
-JIRA_BASE_URL = 'https://demo-sw.atlassian.net'  # Replace with your Jira instance URL
-JIRA_USERNAME = 'jadhavabhijeet6411@gmail.com'  # Replace with your Jira username
-JIRA_API_TOKEN = 'ATATT3xFfGF02p9EeQx8J9wblId9urLXyHHB4csPlMFhvaendzPCDhYH1H1n-yUB5SSX3RnZsgDglteTdMLp6RfIMYMW0PHh3m9UxDIwFO7X9TUOtLrx6OPUnWhngo9m3VcBEydvzleCqEdUN3_yET9OLENewtTlx4SRldgBSgoDJmidHVYdoCg=AFC67CC0'  # Replace with your Jira API token
-JIRA_PROJECT_KEY = 'DS'  # Replace with the ID of the Jira dashboard where you want to upload
-PARENT_ISSUE_KEY = 'DS-2'
-#jira = JIRA(JIRA_BASE_URL, basic_auth=(JIRA_USERNAME, JIRA_API_TOKEN))
-jira_credentials = (JIRA_USERNAME, JIRA_API_TOKEN)
-
-jira = JIRA(server=JIRA_BASE_URL, basic_auth=jira_credentials)
-
-def create_jira_subtask(parent_issue_key, summary, description, issue_type='Sub-task'):
-    
-    ticket_number = int(time.time())
-    issue_dict = {
-        'project': {'key': JIRA_PROJECT_KEY},
-        'summary': f'{summary} ({ticket_number})',
-        'description': description,
-        'issuetype': {'name': issue_type},
-        'parent': {'key': parent_issue_key}
-    }
-    new_issue = jira.create_issue(fields=issue_dict)
-    return new_issue.key
-
-# Function to upload report file as an attachment to Jira issue
-def upload_attachment_to_jira_issue(issue_key, attachment_file_path):
-    with open(attachment_file_path, 'rb') as file:
-        jira.add_attachment(issue=issue_key, attachment=file)
-
 # Replace with your GitHub repository details
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 
 # Replace with your repository details
 REPO_OWNER = 'Abhijeet1Jadhav'
-REPO_NAME = 'semantic1'
+REPO_NAME = 'demorelease'
 WORKFLOWS_FOLDER = 'workflow_files'
 
 headers = {
