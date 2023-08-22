@@ -204,13 +204,23 @@ df['Job End Time'] = pd.to_datetime(df['Job End Time'])
 # Extract the date from the 'Job Start Time' column and add it as a new column 'Date'
 df['Date'] = df['Job Start Time'].dt.date
 
-# Group by 'Date', 'Run Name', 'Job Name', and 'Step Name', and get count of daily runs for each combination
-pivot_table = df.groupby(['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'Job Conclusion']).size().unstack(fill_value=0)
+pivot_table = df.pivot_table(
+    index=['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name'],
+    columns='Job Conclusion',
+    values='Total Deployments',
+    aggfunc='sum',
+    fill_value=0
+)
 
-# Add 'Total' column to the pivot table to get the total count of runs for each combination
-pivot_table['Total Deployments'] = pivot_table.sum(axis=1)
+# Reset index to get rid of multi-index
+pivot_table = pivot_table.reset_index()
 
-pivot_table.index = pd.to_datetime([x[0] for x in pivot_table.index])
+# Add 'Total Deployments' column by summing up 'failure' and 'success'
+pivot_table['Total Deployments'] = pivot_table['failure'] + pivot_table['success']
+
+# Reorder the columns as per your specified format
+column_order = ['Date', 'Repository Name', 'Run Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
+pivot_table = pivot_table[column_order]
 
 # Create an in-memory Excel workbook
 excel_output = BytesIO()
@@ -221,33 +231,25 @@ worksheet_pivot = workbook.add_worksheet('Pivot Table')
 
 # Write the column headers
 header_format = workbook.add_format({'bold': True, 'align': 'center'})
-column_names = ['Date', 'Run Name', 'Repository Name', 'Job Name', 'Step Name', 'failure', 'success', 'Total Deployments']
-for col_idx, header in enumerate(column_names):
+for col_idx, header in enumerate(pivot_table.columns):
     worksheet_pivot.write(0, col_idx, header, header_format)
 
 # Write the data rows
 date_format = workbook.add_format({'num_format': 'yyyy-mm-dd'})
-for row_idx, (index, row) in enumerate(pivot_table.iterrows(), start=1):
-    worksheet_pivot.write_datetime(row_idx, 0, index, date_format)
+for row_idx, (_, row) in enumerate(pivot_table.iterrows(), start=1):
+    worksheet_pivot.write_datetime(row_idx, 0, row['Date'], date_format)
     for col_idx, value in enumerate(row, start=1):
         worksheet_pivot.write(row_idx, col_idx, value)
-
-# Add a new worksheet for deployment counts
-worksheet_counts = workbook.add_worksheet('Deployment Counts')
-worksheet_counts.write_row(0, 0, ['Environment', 'Deployment Count'])
-worksheet_counts.write_row(1, 0, ['Dev', total_deployment_counts['Dev']])
-worksheet_counts.write_row(2, 0, ['QA', total_deployment_counts['QA']])
-worksheet_counts.write_row(3, 0, ['Prod', total_deployment_counts['Prod']])
 
 # Close the workbook
 workbook.close()
 
 # Save the in-memory Excel workbook to a file
-excel_file = 'pivot_table.xlsx'
+excel_file = 'pivot_table_formatted.xlsx'
 with open(excel_file, 'wb') as file:
     file.write(excel_output.getvalue())
 
-print(f'Successfully created Excel file "{excel_file}" with pivot table and deployment counts.')
+print(f'Successfully created Excel file "{excel_file}" with formatted pivot table.')
 
 #print(f'Successfully created the pivot table and saved it as "{pivot_csv_file}".')
 
