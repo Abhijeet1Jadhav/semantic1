@@ -8,6 +8,7 @@ from jira import JIRA
 import base64
 import time
 import sys
+import xlsxwriter
 from io import BytesIO
 
 # Jira configuration
