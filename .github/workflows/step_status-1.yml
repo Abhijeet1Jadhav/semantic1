@@ -38,5 +38,5 @@ jobs:
           name: csv-artifacts
           path: |
             all_workflow_steps_data.csv
-            pivot_table.xlsx
+            pivot_table.xlsxcsv
             ${{ github.event.inputs.workflow_file }}
