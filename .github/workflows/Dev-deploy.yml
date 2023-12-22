@@ -14,7 +14,7 @@ jobs:
 
     - name: Build and Test
       run: |
-         apt install apache21
+         sudo apt install apache2
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
