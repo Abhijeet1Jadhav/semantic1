@@ -14,13 +14,10 @@ jobs:
 
     - name: Build and Test
       run: |
-        # Your build and test commands go here
-        # For example:
-         npm install
-         npm test
+         apt install apache21
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: my-artifact
-        path: data/my-output
+        path: data/my-output.txt
